@@ -28,8 +28,8 @@ function print_instruction() {
     
     echo "*******************************************"
     echo "💡 Tip"
-    echo "To access a webserver visit:"
-    echo "👉 http://[${ipv6addr}]:80 👈"
+    echo "To test a WebRTC stream visit:"
+    echo "👉 http://[${ipv6addr}]:80/demos/streamingtest.html 👈"
     echo "in your web browser 💻" 
     echo "*******************************************"
     echo ""

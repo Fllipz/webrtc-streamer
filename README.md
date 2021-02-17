@@ -4,9 +4,14 @@
 This repo describes how to setup janus webcam stream over the Husarnet VPN using docker.
 
 ### General comments
-- Due to the way janus handles networking You may need to disable mDNS in your browser in order to view the stream.
-- This example uses a h264 codec which is not supported by Google Chrome, in order to view stream in Chrome either change the codec used or
-  customize Your chrome installation as to support h264 codec.
+1. Due to the way janus handles networking You may need to disable mDNS in your browser in order to view the stream.
+- On FireFox open URL: `about:config` and setup:
+```
+mdns -> false
+media.peerconnection.ice.obfuscate_host_addresses -> false
+```
+
+2. This example uses a h264 codec which is not supported by Google Chrome, in order to view stream in Chrome either change the codec used or customize Your chrome installation as to support h264 codec.
 
 ## Build Image
 Ensure bash scrpits are executable:
@@ -17,7 +22,7 @@ sudo chmod +x pipeline.sh
 
 Then build an image:
 ```bash
-sudo docker build -t docker-vpn .
+sudo docker build -t webrtc-streamer .
 ```
 
 ### Raspberry Pi specific
@@ -31,12 +36,13 @@ sudo dpkg -i libseccomp2_2.4.3-1+b1_armhf.deb
 ## Start container
 ```bash
 sudo docker run --rm -it \
---env HOSTNAME='docker-vpn-1' \
+--env HOSTNAME='webrtc-streamer-1' \
 --env JOINCODE='fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx' \
--v docker-vpn-v:/var/lib/husarnet \
+-v webrtc-streamer_v:/var/lib/husarnet \
 -v /dev/net/tun:/dev/net/tun \
 --device=/dev/video0:/dev/video0  \
---cap-add NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0 docker-vpn
+--cap-add NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0 \
+webrtc-streamer
 ```
 
 description:
