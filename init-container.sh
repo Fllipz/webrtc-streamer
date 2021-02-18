@@ -70,7 +70,12 @@ echo ""
 # start a web server
 nginx
 print_instruction < <(husarnet status)
+if [ -z ${flag+x} ]
+then
 /opt/pipeline.sh &
+else
+/opt/test-pipeline.sh &
+fi
 /opt/janus/bin/janus --nat-1-1=${DOCKER_IP}
 
 

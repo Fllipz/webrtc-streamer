@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.10
 
 # install Husarnet client
 RUN apt update -y && \
@@ -23,6 +23,7 @@ ENV HOSTNAME=my-container-1
 # HTTP PORT
 EXPOSE 80
 
+RUN apt-get update -y
 # Install janus dependencies
 RUN apt-get install -y \
     build-essential \
@@ -91,6 +92,7 @@ EXPOSE 8000-8010/udp
 # copy project files into the image
 COPY init-container.sh /opt
 COPY pipeline.sh /opt
+COPY test-pipeline.sh /opt
 COPY src /var/www/html/
 
 # initialize a container
