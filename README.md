@@ -12,7 +12,7 @@ media.peerconnection.ice.obfuscate_host_addresses -> false
 ```
 
 2. This example uses two codecs: h264 and VP8 which can be changed when accessing stream via provided frontend.
-However the h264 codec is the default one used when stream starts on page load.
+However the h264 codec is the default on all browsers other than Chrome due to lower latency.
 
 ## Build Image
 Ensure bash scrpits are executable:
@@ -164,7 +164,7 @@ Redistribute latency...
 ```
 
 Now going to the ipv6 adress printed by the script you should see the stream.
-The codec can be changed between h264(default) and VP8 by stoping the stream and then choosing the needed codec.
+The codec can be changed between h264(default for browsers other than Chrome) and VP8 by stoping the stream and then choosing the needed codec.
 This should be accessible from any devices connected to your Husarnet network
 
 ## Non Docker version

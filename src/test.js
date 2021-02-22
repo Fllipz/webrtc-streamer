@@ -290,6 +290,9 @@ function getStreamInfo() {
 }
 
 function startStream() {
+    if(Janus.webRTCAdapter.browserDetails.browser === "chrome"){
+        selectedStream = 11;
+    }
 	Janus.log("Selected video id #" + selectedStream);
 	if(!selectedStream) {
 		bootbox.alert("Select a stream from the list");
