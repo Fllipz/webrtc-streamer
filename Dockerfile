@@ -91,8 +91,7 @@ EXPOSE 8000-8010/udp
 
 # copy project files into the image
 COPY init-container.sh /opt
-COPY pipeline.sh /opt
-COPY test-pipeline.sh /opt
+COPY *.sh /opt/
 COPY src /var/www/html/
 
 # initialize a container
