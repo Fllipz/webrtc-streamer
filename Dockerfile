@@ -96,6 +96,8 @@ COPY test-pipeline.sh /opt
 COPY src /var/www/html/
 
 # initialize a container
+RUN cp -r /opt/janus/share/janus/demos/. /var/www/html
+COPY src /var/www/html/
 RUN cp -r /opt/janus/share/janus/demos/ /var/www/html
 CMD /opt/init-container.sh
 
