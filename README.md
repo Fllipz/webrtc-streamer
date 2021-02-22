@@ -11,7 +11,8 @@ mdns -> false
 media.peerconnection.ice.obfuscate_host_addresses -> false
 ```
 
-2. This example uses a h264 codec which is not supported by Google Chrome, in order to view stream in Chrome either change the codec used or customize Your chrome installation as to support h264 codec.
+2. This example uses two codecs: h264 and VP8 which can be changed when accessing stream via provided frontend.
+However the h264 codec is the default one used when stream starts on page load.
 
 ## Build Image
 Ensure bash scrpits are executable:
@@ -157,10 +158,13 @@ Pipeline is PREROLLED ...
 Setting pipeline to PLAYING ...
 New clock: GstSystemClock
 Redistribute latency...
-[h264-sample] New video stream! (ssrc=3800949643, index 0)
+Redistribute latency...
+[h264-sample] New video stream! (ssrc=549389682, index 0)
+[vp8-sample] New video stream! (ssrc=3039609294, index 0)
 ```
 
-Now going to the ipv6 adress printed by the script and navigating to path /demos/streamingtest.html you should be able to access the stream from your webcam listed as H.264.
+Now going to the ipv6 adress printed by the script you should see the stream.
+The codec can be changed between h264(default) and VP8 by stoping the stream and then choosing the needed codec.
 This should be accessible from any devices connected to your Husarnet network
 
 ## Non Docker version
@@ -241,8 +245,18 @@ service nginx start
 
 ### Create Gstreamer pipeline
 ```bash
-$ gst-launch-1.0 v4l2src device=/dev/video0 ! 'video/x-raw, width=640, height=480, framerate=15/1' ! \
- videoconvert ! timeoverlay  ! x264enc tune=zerolatency  ! rtph264pay config-interval=1 pt=96 ! udpsink host=127.0.0.1 port=8005
+$ gst-launch-1.0 v4l2src device=/dev/video0  \
+    ! tee name=t \
+    ! queue !  'video/x-raw,framerate=30/1,width=320,height=240' \
+    ! videoconvert \
+    ! vp8enc  \
+    ! rtpvp8pay \
+    ! udpsink host=localhost port=8006 t. \
+    ! queue ! videoconvert \
+    ! x264enc tune=zerolatency \
+    ! rtph264pay \
+    ! udpsink host=localhost port=8005
+
 ```
 
 ### Run janus
