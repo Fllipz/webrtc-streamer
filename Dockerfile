@@ -24,9 +24,10 @@ ENV HOSTNAME=my-container-1
 EXPOSE 80
 
 RUN apt update -y
-RUN apt install -y ffmpeg
-
 RUN apt-get update -y
+
+RUN apt-get install -y ffmpeg
+
 # Install janus dependencies
 RUN apt-get install -y \
     build-essential \
