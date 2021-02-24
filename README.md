@@ -11,15 +11,18 @@ mdns -> false
 media.peerconnection.ice.obfuscate_host_addresses -> false
 ```
 
-2. This example uses two codecs: h264 and VP8 which can be changed when accessing stream via provided frontend.
-However the h264 codec is the default on all browsers other than Chrome due to lower latency.
+2. This example is capable of using one of two codecs: H264 or VP8. H264 is used be default,
+   in order to change it to VP8 You need to set the env variable CODEC when starting the container as such:
+   ---env CODEC="vp8"
 
 ## Build Image
 Ensure bash scrpits are executable:
 ```bash
 sudo chmod +x init-container.sh
-sudo chmod +x pipeline.sh
-sudo chmod +x test-pipeline.sh
+sudo chmod +x h264-pipe.sh
+sudo chmod +x vp8-pipe.sh
+sudo chmod +x mock-h264-pipe.sh
+sudo chmod +x mock-vp8-pipe.sh
 ```
 
 Then build an image:
@@ -164,8 +167,7 @@ Redistribute latency...
 ```
 
 Now going to the ipv6 adress printed by the script you should see the stream.
-The codec can be changed between h264(default for browsers other than Chrome) and VP8 by stoping the stream and then choosing the needed codec.
-This should be accessible from any devices connected to your Husarnet network
+This should be accessible from any devices connected to your Husarnet network.
 
 ## Non Docker version
 

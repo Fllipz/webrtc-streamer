@@ -72,9 +72,19 @@ nginx
 print_instruction < <(husarnet status)
 if [ -z ${flag+x} ]
 then
-/opt/pipeline.sh &
+if [ -z ${CODEC+x} ]
+then
+/opt/h264-pipe.sh &
 else
-/opt/test-pipeline.sh &
+/opt/vp8-pipe.sh &
+fi
+else
+if [ -z ${CODEC+x} ]
+then
+/opt/mock-h264-pipe.sh &
+else
+/opt/mock-vp8-pipe.sh &
+fi
 fi
 /opt/janus/bin/janus --nat-1-1=${DOCKER_IP}
 
