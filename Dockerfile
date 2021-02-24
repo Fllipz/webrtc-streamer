@@ -23,7 +23,12 @@ ENV HOSTNAME=my-container-1
 # HTTP PORT
 EXPOSE 80
 
+RUN apt update -y
 RUN apt-get update -y
+
+RUN apt-get install -y ffmpeg
+
+
 # Install janus dependencies
 RUN apt-get install -y \
     build-essential \
@@ -49,8 +54,6 @@ RUN apt-get install -y \
 	make \
 	sudo 
 
-
-RUN sudo apt install -y ffmpeg
 
 # Install libsrtp
 RUN cd ~ \

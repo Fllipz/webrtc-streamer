@@ -12,7 +12,13 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 <script type="text/javascript" src="janus.js" ></script>
-<script type="text/javascript" src="test.js"></script>
+<script type="text/javascript" src="utils.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	  start(10);
+	});
+</script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/demo.css" type="text/css"/>
@@ -29,30 +35,10 @@
 				<div class="col-md-6">
 					<div class="row">
 						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h3 class="panel-title">Streams <i id="update-streams" class="fa fa-refresh" title="Update list of streams" style="cursor: pointer;"></i></h3>
-							</div>
 							<div class="panel-body" id="list">
 								<div class="btn-group btn-group-sm">
-									<button class="btn btn-primary" autocomplete="off" id="watch">Watch or Listen</button>
-									<div class="btn-group btn-group-sm">
-										<button autocomplete="off" id="streamset" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-											Streams list<span class="caret"></span>
-										</button>
-										<ul id="streamslist" class="dropdown-menu" role="menu">
-										</ul>
-									</div>
+									<button class="btn btn-primary" autocomplete="off" id="watch">Watch</button>
 								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row" id="info">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h3 class="panel-title"><i class="fa fa-info-circle"></i> Metadata</h3>
-							</div>
-							<div class="panel-body">
-								<pre id="metadata" style="word-break: break-word;"></pre>
 							</div>
 						</div>
 					</div>
