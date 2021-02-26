@@ -15,6 +15,10 @@ media.peerconnection.ice.obfuscate_host_addresses -> false
    in order to change it to VP8 You need to set the env variable CODEC when starting the container as such:
    ---env CODEC="vp8"
 
+3. During testing I used a webcam which ofered a feed encoded using hte H264 codec and as such there was no need 
+   to reencode the stream in ffmpeg, lowering latency. However when streaming VP8 codec there is a need for encoding the stream in ffmpeg which makes latency higher. During testing vlatency vaules for H264 codec were around 400ms whereas 
+   for tge VP8 codec it was cloaser to 1s.
+
 ## Build Image
 Ensure bash scrpits are executable:
 ```bash
@@ -258,7 +262,6 @@ $ gst-launch-1.0 v4l2src device=/dev/video0  \
     ! x264enc tune=zerolatency \
     ! rtph264pay \
     ! udpsink host=localhost port=8005
-
 ```
 
 ### Run janus
