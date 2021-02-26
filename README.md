@@ -89,20 +89,20 @@ waiting...
 waiting...
 success
 
-🔥 [2/2] Connecting to Husarnet network as "docker-vpn-1":
-[244141459] joining...
-[244143460] joining...
+🔥 [2/2] Connecting to Husarnet network as "web-streamer":
+[9929599] joining...
+[9931602] joining...
 done
 
 *******************************************
 💡 Tip
-To access a webserver visit:
-👉 http://[fc94:eaa2:5adf:91d4:d0ec:b14f:3968:f519]:80 👈
+To test a WebRTC stream visit:
+👉 http://[fc94:40d4:4574:7b91:da05:db42:45bb:f6ab]:80/ 👈
 in your web browser 💻
 *******************************************
 
-Janus commit: ad54495df09e8b96386df40b96b4212fe36a92b7
-Compiled on:  Mon Feb 15 11:30:55 UTC 2021
+Janus commit: caaba91081ba8e5578a24bca1495a8572f08e65c
+Compiled on:  Wed Feb 24 11:32:15 UTC 2021
 
 Logger plugins folder: /opt/janus/lib/janus/loggers
 [WARN] 	Couldn't access logger plugins folder...
@@ -111,63 +111,42 @@ Logger plugins folder: /opt/janus/lib/janus/loggers
 ---------------------------------------------------
 
 Checking command line arguments...
-Debug/log level is 4
+Debug/log level is 0
 Debug/log timestamps are disabled
 Debug/log colors are enabled
-Adding 'vmnet' to the ICE ignore list...
-Using 172.17.0.2 as local IP...
-Token based authentication disabled
-Initializing recorder code
-Using nat_1_1_mapping for public IP: 
-Initializing ICE stuff (Full mode, ICE-TCP candidates disabled, half-trickle, IPv6 support enabled)
-[WARN] Janus is deployed on a private address (172.17.0.2) but you didn't specify any STUN server! Expect trouble if this is supposed to work over the internet and not just in a LAN...
-Crypto: OpenSSL >= 1.1.0
-No cert/key specified, autogenerating some...
-Fingerprint of our certificate: 92:86:5F:BF:E2:21:DA:5D:45:BD:5F:32:C1:7B:D8:74:1D:5F:23:C7:F3:1F:35:19:84:CE:09:3A:8C:48:96:E6
-[WARN] Data Channels support not compiled
-Event handlers support disabled
-Plugins folder: /opt/janus/lib/janus/plugins
-Sessions watchdog started
-Joining Janus requests handler thread
-Loading plugin 'libjanus_audiobridge.so'...
-JANUS AudioBridge plugin initialized!
-Loading plugin 'libjanus_textroom.so'...
-[WARN] Data channels support not compiled, disabling TextRoom plugin
-[WARN] The 'janus.plugin.textroom' plugin could not be initialized
-Loading plugin 'libjanus_videoroom.so'...
-JANUS VideoRoom plugin initialized!
-Loading plugin 'libjanus_voicemail.so'...
-JANUS VoiceMail plugin initialized!
-Loading plugin 'libjanus_nosip.so'...
-JANUS NoSIP plugin initialized!
-Loading plugin 'libjanus_sip.so'...
-JANUS SIP plugin initialized!
-Loading plugin 'libjanus_recordplay.so'...
-JANUS Record&Play plugin initialized!
-Loading plugin 'libjanus_videocall.so'...
-JANUS VideoCall plugin initialized!
-Loading plugin 'libjanus_streaming.so'...
-[WARN] libcurl not available, Streaming plugin will not have RTSP support
-JANUS Streaming plugin initialized!
-Loading plugin 'libjanus_echotest.so'...
-JANUS EchoTest plugin initialized!
-Transport plugins folder: /opt/janus/lib/janus/transports
-Loading transport plugin 'libjanus_pfunix.so'...
-[WARN] No Unix Sockets server started, giving up...
-[WARN] The 'janus.transport.pfunix' plugin could not be initialized
-Loading transport plugin 'libjanus_http.so'...
-HTTP transport timer started
-HTTP webserver started (port 8088, /janus path listener)...
-JANUS REST (HTTP/HTTPS) transport plugin initialized!
-Setting pipeline to PAUSED ...
-Pipeline is live and does not need PREROLL ...
-Pipeline is PREROLLED ...
-Setting pipeline to PLAYING ...
-New clock: GstSystemClock
-Redistribute latency...
-Redistribute latency...
-[h264-sample] New video stream! (ssrc=549389682, index 0)
-[vp8-sample] New video stream! (ssrc=3039609294, index 0)
+ffmpeg version 4.3.1-4ubuntu1 Copyright (c) 2000-2020 the FFmpeg developers
+  built with gcc 10 (Ubuntu 10.2.0-9ubuntu2)
+  configuration: --prefix=/usr --extra-version=4ubuntu1 --toolchain=hardened --libdir=/usr/lib/arm-linux-gnueabihf --incdir=/usr/include/arm-linux-gnueabihf --arch=arm --enable-gpl --disable-stripping --enable-avresample --disable-filter=resample --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librsvg --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --enable-pocketsphinx --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libx264 --enable-shared
+  libavutil      56. 51.100 / 56. 51.100
+  libavcodec     58. 91.100 / 58. 91.100
+  libavformat    58. 45.100 / 58. 45.100
+  libavdevice    58. 10.100 / 58. 10.100
+  libavfilter     7. 85.100 /  7. 85.100
+  libavresample   4.  0.  0 /  4.  0.  0
+  libswscale      5.  7.100 /  5.  7.100
+  libswresample   3.  7.100 /  3.  7.100
+  libpostproc    55.  7.100 / 55.  7.100
+Input #0, video4linux2,v4l2, from '/dev/video0':
+  Duration: N/A, start: 9936.517693, bitrate: N/A
+    Stream #0:0: Video: h264 (Constrained Baseline), yuvj420p(pc, progressive), 320x240 [SAR 1:1 DAR 4:3], 15 fps, 15 tbr, 1000k tbn, 30 tbc
+Output #0, rtp, to 'rtp://localhost:8005':
+  Metadata:
+    encoder         : Lavf58.45.100
+    Stream #0:0: Video: h264 (Constrained Baseline), yuvj420p(pc, progressive), 320x240 [SAR 1:1 DAR 4:3], q=2-31, 15 fps, 15 tbr, 90k tbn, 15 tbc
+SDP:
+v=0
+o=- 0 0 IN IP6 ::1
+s=No Name
+c=IN IP6 ::1
+t=0 0
+a=tool:libavformat 58.45.100
+m=video 8005 RTP/AVP 96
+a=rtpmap:96 H264/90000
+a=fmtp:96 packetization-mode=1; sprop-parameter-sets=Z0JAKLtAoPv4CiQAAAMABAAAAwB5gQAAtxsAC3Hve+F4RCNQ,aM44gAA=; profile-level-id=424028
+
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+Press [q] to stop, [?] for help
 ```
 
 Now going to the ipv6 adress printed by the script you should see the stream.
@@ -209,11 +188,9 @@ $ make
 $ make install
 $ make configs
 ```
-### Install Gstreamer
+### Install ffmpeg
 ```bash
-$ apt-get install libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
-  gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc \
-  gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa 
+$ apt-get install ffmpeg
 ```
 
 
@@ -244,24 +221,23 @@ You need to uncomment the following section:
 }
 This is a description of our stream that we want to capture and forward.
 
+### Move h264.html as index.html to ngnix folder as well as janus files to be served
+```bash
+$ cp -r /opt/janus/share/janus/demos/. /var/www/html
+$ cp -f src/h264.html /var/www/html/index.html
+```
+
+
 ### Start nginx
 ```bash
 service nginx start
 ```
 
-### Create Gstreamer pipeline
+### Create ffmpeg pipeline
+This is an example that I used with a webcam capable of h264 feed
 ```bash
-$ gst-launch-1.0 v4l2src device=/dev/video0  \
-    ! tee name=t \
-    ! queue !  'video/x-raw,framerate=30/1,width=320,height=240' \
-    ! videoconvert \
-    ! vp8enc  \
-    ! rtpvp8pay \
-    ! udpsink host=localhost port=8006 t. \
-    ! queue ! videoconvert \
-    ! x264enc tune=zerolatency \
-    ! rtph264pay \
-    ! udpsink host=localhost port=8005
+$ ffmpeg -f v4l2 -framerate 15 -video_size 320x240 -codec:v h264 -i /dev/video0 \
+         -an -c:v copy  -f rtp rtp://localhost:8005
 ```
 
 ### Run janus
@@ -270,3 +246,5 @@ In /opt/janus/bin:
 $ ./janus
 
 ```
+
+Now you can go to the husarnet address and should see the stream.
