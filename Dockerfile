@@ -16,18 +16,9 @@ RUN apt install -y nginx
 RUN apt install -y vim
 RUN apt install -y iputils-ping
 
-# Find your JOINCODE at https://app.husarnet.com
-ENV JOINCODE=""
-ENV HOSTNAME=my-container-1
-ENV CODEC=H264
-ENV TEST=false
-
-# HTTP PORT
-EXPOSE 80
-
+# ffmpeg
 RUN apt update -y
 RUN apt-get update -y
-
 RUN apt-get install -y ffmpeg
 
 # Install janus dependencies
@@ -74,12 +65,21 @@ RUN cd ~ \
 && sudo make install \
 && sudo make configs
 
-# Configure janus
-COPY conf/*.jcfg  /opt/janus/etc/janus/
+RUN cp -r /opt/janus/share/janus/demos/. /var/www/html
+RUN rm -rf /var/www/html/favicon.ico
+
+# Find your JOINCODE at https://app.husarnet.com
+ENV JOINCODE=""
+ENV HOSTNAME=my-container-1
+ENV CODEC=H264
+ENV TEST=false
 
 EXPOSE 80 7088 8088 8188 8089
 EXPOSE 10000-10200/udp
 EXPOSE 8000-8010/udp
+
+# Configure janus
+COPY conf/*.jcfg  /opt/janus/etc/janus/
 
 # copy project files into the image
 COPY init-container.sh /opt
@@ -87,8 +87,5 @@ COPY *.sh /opt/
 COPY src /var/www/html/
 
 # initialize a container
-RUN cp -r /opt/janus/share/janus/demos/. /var/www/html
-COPY src /var/www/html/
-RUN cp -r /opt/janus/share/janus/demos/ /var/www/html
 CMD /opt/init-container.sh
 
