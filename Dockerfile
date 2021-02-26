@@ -19,6 +19,8 @@ RUN apt install -y iputils-ping
 # Find your JOINCODE at https://app.husarnet.com
 ENV JOINCODE=""
 ENV HOSTNAME=my-container-1
+ENV CODEC=H264
+ENV TEST=false
 
 # HTTP PORT
 EXPOSE 80

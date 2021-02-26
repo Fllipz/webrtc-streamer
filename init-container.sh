@@ -70,9 +70,9 @@ echo ""
 # start a web server
 nginx
 print_instruction < <(husarnet status)
-if [ -z ${flag+x} ]
+if [[ ${TEST} == false ]];
 then
-if [ -z ${CODEC+x} ]
+if [[ ${CODEC} == H264 ]];
 then
 cp -f /var/www/html/h264.html /var/www/html/index.html
 /opt/h264-pipe.sh &
@@ -81,7 +81,7 @@ cp -f /var/www/html/vp8.html /var/www/html/index.html
 /opt/vp8-pipe.sh &
 fi
 else
-if [ -z ${CODEC+x} ]
+if [[ ${CODEC} == H264 ]];
 then
 cp -f /var/www/html/h264.html /var/www/html/index.html
 /opt/mock-h264-pipe.sh &
