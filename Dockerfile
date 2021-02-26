@@ -68,6 +68,11 @@ RUN cd ~ \
 RUN cp -r /opt/janus/share/janus/demos/. /var/www/html
 RUN rm -rf /var/www/html/favicon.ico
 
+# utility to list and change control options for a camera, eg.
+# v4l2-ctl -d /dev/video0 --list-ctrls
+# v4l2-ctl --set-ctrl=exposure_auto=1
+RUN apt-get install -y v4l-utils
+
 # Find your JOINCODE at https://app.husarnet.com
 ENV JOINCODE=""
 ENV HOSTNAME=my-container-1

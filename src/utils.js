@@ -288,9 +288,9 @@ function getStreamInfo() {
 }
 
 function startStream() {
-    if(Janus.webRTCAdapter.browserDetails.browser === "chrome"){
-        selectedStream = 11;
-    }
+    // if(Janus.webRTCAdapter.browserDetails.browser === "chrome"){
+    //     selectedStream = 11;
+    // }
 	Janus.log("Selected video id #" + selectedStream);
 	if(!selectedStream) {
 		bootbox.alert("Select a stream from the list");
@@ -320,7 +320,7 @@ function stopStream() {
 	streaming.hangup();
 	$('#streamset').removeAttr('disabled');
 	$('#streamslist').removeAttr('disabled');
-	$('#watch').html("Watch or Listen").removeAttr('disabled').unbind('click').click(startStream);
+	$('#watch').html("Start").removeAttr('disabled').unbind('click').click(startStream);
 	$('#status').empty().hide();
 	$('#bitrate').attr('disabled', true);
 	$('#bitrateset').html('Bandwidth<span class="caret"></span>');
