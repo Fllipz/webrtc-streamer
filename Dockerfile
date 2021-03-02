@@ -73,6 +73,12 @@ RUN rm -rf /var/www/html/favicon.ico
 # v4l2-ctl --set-ctrl=exposure_auto=1
 RUN apt-get install -y v4l-utils
 
+# install python dependencies
+RUN apt install python3.8 -y && \
+    apt install python-pkg-resources python3-pkg-resources -y && \
+    apt install python3-pip -y && \
+    pip3 install websockets
+
 # Find your JOINCODE at https://app.husarnet.com
 ENV JOINCODE=""
 ENV HOSTNAME=my-container-1
@@ -90,6 +96,9 @@ COPY conf/*.jcfg  /opt/janus/etc/janus/
 COPY init-container.sh /opt
 COPY *.sh /opt/
 COPY src /var/www/html/
+
+WORKDIR /app
+COPY back_src /app/
 
 # initialize a container
 CMD /opt/init-container.sh

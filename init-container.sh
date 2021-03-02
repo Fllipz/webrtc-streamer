@@ -90,6 +90,7 @@ cp -f /var/www/html/vp8.html /var/www/html/index.html
 /opt/mock-vp8-pipe.sh &
 fi
 fi
+python3 websocket_server.py &
 /opt/janus/bin/janus --nat-1-1=${DOCKER_IP}
 
 

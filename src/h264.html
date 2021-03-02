@@ -13,6 +13,7 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
 	<script type="text/javascript" src="janus.js"></script>
 	<script type="text/javascript" src="utils.js"></script>
+	<script type="text/javascript" src="websocket_client.js"></script>
 
 	<!-- Bootstrap 4 dependencies -->
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -32,6 +33,7 @@
 		// from utils.js
 		$(document).ready(function () {
 			start(10);
+			WebSocketBegin()
 		});
 	</script>
 
@@ -54,6 +56,14 @@
 						</p>
 						<button class="btn btn-primary" autocomplete="off" id="watch">Watch</button>
 					</div>
+					<div class="card-body bg-dark text-light invisible" id="p2p_connection">
+						<p class="card-text">
+							<span>Peer-to-peer error. Forwarding traffic through a Base Server.</span><br>
+							<span> Visit <a href="https://husarnet.com/docs/tutorial-troubleshooting" a>https://husarnet.com/docs/tutorial-troubleshooting</a> to solve your connection issue</span>
+						</p>
+					</div>
+					
+					
 					<div class="card-img-bottom bg-dark p-1" id="stream"></div>
 				</div>
 			</div>

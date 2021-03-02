@@ -13,10 +13,12 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 <script type="text/javascript" src="janus.js" ></script>
 <script type="text/javascript" src="utils.js"></script>
+<script type="text/javascript" src="websocket_client.js"></script>
 
 <script type="text/javascript">
 	$(document).ready(function() {
 	  start(11);
+	  WebSocketBegin()
 	});
 </script>
 
@@ -51,6 +53,12 @@
 								<span class="label label-primary" id="curres"></span>
 								<span class="label label-info" id="curbitrate"></span>
 							</h3>
+						</div>
+						<div class="card-body bg-dark text-light invisible" id="p2p_connection">
+							<p class="card-text">
+								<span>Peer-to-peer error. Forwarding traffic through a Base Server.</span><br>
+								<span> Visit <a href="https://husarnet.com/docs/tutorial-troubleshooting" a>https://husarnet.com/docs/tutorial-troubleshooting</a> to solve your connection issue</span>
+							</p>
 						</div>
 						<div class="panel-body" id="stream"></div>
 					</div>
