@@ -18,6 +18,8 @@ function WebSocketBegin() {
         ws.onopen = function () {
             // Web Socket is connected
             console.log("Websocket connected!");
+            ws.send('{"check_connection": 1}');
+            ws.send('{"get_feed_options": 1}');
         };
 
         ws.onmessage = function (evt) {
@@ -25,6 +27,7 @@ function WebSocketBegin() {
             var jsonObject = JSON.parse(evt.data);
             console.log(jsonObject);
             if(jsonObject.hasOwnProperty("connection")){
+                if(jsonObject['connection']==0)
                 $('#p2p_connection').removeClass('invisible');
             }
         };

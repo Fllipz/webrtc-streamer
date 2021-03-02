@@ -75,23 +75,23 @@ then
 if [[ ${CODEC} == H264 ]];
 then
 cp -f /var/www/html/h264.html /var/www/html/index.html
-/opt/h264-pipe.sh &
+#/opt/h264-pipe.sh &
 else
 cp -f /var/www/html/vp8.html /var/www/html/index.html
-/opt/vp8-pipe.sh &
+#/opt/vp8-pipe.sh &
 fi
 else
 if [[ ${CODEC} == H264 ]];
 then
 cp -f /var/www/html/h264.html /var/www/html/index.html
-/opt/mock-h264-pipe.sh &
+#/opt/mock-h264-pipe.sh &
 else
 cp -f /var/www/html/vp8.html /var/www/html/index.html
-/opt/mock-vp8-pipe.sh &
+#/opt/mock-vp8-pipe.sh &
 fi
 fi
 python3 websocket_server.py &
-/opt/janus/bin/janus --nat-1-1=${DOCKER_IP}
+#/opt/janus/bin/janus --nat-1-1=${DOCKER_IP}
 
 
 /bin/bash
