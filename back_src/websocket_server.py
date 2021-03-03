@@ -28,6 +28,15 @@ def check_if_conection_p2p(addr):
         return True
     return False
 
+
+def kill_ffmpeg():
+    pid = int(subprocess.check_output(["pidof","ffmpeg"]))
+    subprocess.run(["kill",str(pid)])
+
+def run_ffmpeg(size, fps):
+    subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', '/dev/video0', '-an', '-c:v', 'copy', '-f', 'rtp', 'rtp://localhost:8005' ])
+
+
 async def hello(websocket, path):
     while(True):
         data = await websocket.recv()

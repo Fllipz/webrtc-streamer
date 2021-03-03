@@ -1,17 +1,15 @@
 import subprocess
+import os
+import signal
+from time import sleep
 
-adres = "fc94:40d4:4574:7b91:da05:db42:45bb:f6ab"
+def kill_ffmpeg():
+    pid = int(subprocess.check_output(["pidof","ffmpeg"]))
+    subprocess.run(["kill",str(pid)])
 
-def check_if_conection_p2p(addr):
-    result = subprocess.run("sudo husarnet status", capture_output=True, shell=True, text=True)
-    start = result.stdout.find("Peer "+addr)
-    end = result.stdout.find("Peer ", start)
-    if start == -1 or end == -1:
-        return False
-    found = result.stdout.find("tunnelled", start, end)
-    if found == -1:
-        return False
-    return True
+def run_ffmpeg(size, fps):
+    subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', '/dev/video2', '-an', '-c:v', 'copy', '-f', 'rtp', 'rtp://localhost:8005' ])
 
-
-print(check_if_conection_p2p(adres))
+run_ffmpeg("320x240","15")
+sleep(1)
+kill_ffmpeg()
