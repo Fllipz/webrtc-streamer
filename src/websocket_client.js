@@ -29,6 +29,8 @@ function WebSocketBegin() {
             if(jsonObject.hasOwnProperty("connection")){
                 if(jsonObject['connection']==0)
                 $('#p2p_connection').removeClass('invisible');
+            }else if(jsonObject.hasOwnProperty("options")){
+                
             }
         };
 
