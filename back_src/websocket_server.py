@@ -6,6 +6,7 @@ import json
 import argparse
 import os
 import subprocess
+import re
 
 
 
@@ -45,7 +46,7 @@ def find_between_strs( s, first, last ):
         return ""
 
 def get_feed_options():
-    result = subprocess.run(['v4l2-ctl', '-d', '2', '--list-formats-ext', ],capture_output=True,text=True)
+    result = subprocess.run(['v4l2-ctl', '-d', '0', '--list-formats-ext', ],capture_output=True,text=True)
     found = find_between_strs(result.stdout,"(H.264, compressed)","[2]")
     chunks = found.split("Size: Discrete")
     parsed = {}
@@ -61,7 +62,7 @@ def get_feed_options():
         
 
     return parsed
-    
+
 
 
 async def hello(websocket, path):
@@ -76,6 +77,8 @@ async def hello(websocket, path):
                 await websocket.send(json.dumps({"connection":0}))
         elif 'get_ffed_options' in data.keys():
             await websocket.send(json.dumps({"options":0}))
+        print(get_feed_options())
+        await websocket.send(json.dumps(get_feed_options()))
     
         
 
