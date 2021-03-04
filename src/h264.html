@@ -32,8 +32,9 @@
 	<script type="text/javascript">
 		// from utils.js
 		$(document).ready(function () {
+			setUpListeners();
 			//start(10);
-			WebSocketBegin()
+			WebSocketBegin();
 		});
 	</script>
 
@@ -69,21 +70,11 @@
 						<div class="form-group">
 							<label for="size_select">Select size</label>
 							<select class="form-control bg-dark text-light" id="size_select">
-							  <option>1</option>
-							  <option>2</option>
-							  <option>3</option>
-							  <option>4</option>
-							  <option>5</option>
 							</select>
 						  </div>
 						  <div class="form-group">
 							<label for="fps_select">Select FPS</label>
 							<select class="form-control bg-dark text-light" id="fps_select">
-							  <option>1</option>
-							  <option>2</option>
-							  <option>3</option>
-							  <option>4</option>
-							  <option>5</option>
 							</select>
 						  </div>
 						  <button type="submit" class="btn btn-primary mb-2">Change</button>

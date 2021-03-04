@@ -1,5 +1,10 @@
 var ws;
 
+feed_options={};
+
+selected_size = null;
+selected_fps = null;
+
 window.addEventListener('beforeunload', (event) => {
     ws.close();
     // Cancel the event as stated by the standard.
@@ -7,6 +12,24 @@ window.addEventListener('beforeunload', (event) => {
     // Older browsers supported custom message
     event.returnValue = '';
 });
+
+function setUpListeners(){
+    $('#size_select').change(function(evt) {
+        var $select = $('#fps_select');
+        fps = feed_options["options"][" "+evt.target.value];
+        $select.find('option').remove();
+        selected_size = evt.target.value;
+        selected_fps = null;
+        $select.append('<option value=' + null + '>' + "---"+ '</option>');
+        for(var fp in fps){
+            $select.append('<option value=' + fps[fp] + '>' + fps[fp]+ '</option>');
+        }
+    });
+    $('#fps_select').change(function(evt){
+        selected_fps = evt.target.value;
+    });
+}
+
 
 function WebSocketBegin() {
     if ("WebSocket" in window) {
@@ -30,7 +53,14 @@ function WebSocketBegin() {
                 if(jsonObject['connection']==0)
                 $('#p2p_connection').removeClass('invisible');
             }else if(jsonObject.hasOwnProperty("options")){
-                
+                var $select = $('#size_select')
+                feed_options = jsonObject;
+                sizes = Object.keys(jsonObject["options"])
+                $select.find('option').remove();
+                $select.append('<option value=' + null + '>' + "---"+ '</option>');
+                for (var i=0;i<sizes.length;i++) {
+                    $select.append('<option value=' + sizes[i] + '>' + sizes[i]+ '</option>');
+                }
             }
         };
 

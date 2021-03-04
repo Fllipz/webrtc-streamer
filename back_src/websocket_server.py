@@ -49,15 +49,15 @@ def get_feed_options():
     result = subprocess.run(['v4l2-ctl', '-d', '0', '--list-formats-ext', ],capture_output=True,text=True)
     found = find_between_strs(result.stdout,"(H.264, compressed)","[2]")
     chunks = found.split("Size: Discrete")
-    parsed = {}
+    parsed = {"options":{}}
     for chunk in chunks[1:]:
         size = chunk.split('\n')[0]
         i=0
-        parsed[size] = {}
+        parsed["options"][size] = {}
         for line in chunk.split('\n')[1:]:
             res = re.search(r'\((.*?) fps\)',line)
             if res != None:
-                parsed[size][i]=res.group(1)
+                parsed["options"][size][i]=res.group(1)
                 i+=1
         
 
