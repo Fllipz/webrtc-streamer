@@ -33,7 +33,8 @@ function setUpListeners(){
         if(selected_size==null||selected_fps==null){
             alert("You need to chose desired size and fps to change stream parameters!");
         }else{
-            ws.send(`{"change_feed":{"size": \"${selected_size}\"  ,  "fps": \"${selected_fps}\"}}`)
+            stopStream();
+            ws.send(`{"change_feed":{"size": \"${selected_size}\"  ,  "fps": \"${selected_fps}\"}}`);
         }
     })
 }
