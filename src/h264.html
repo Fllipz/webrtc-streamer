@@ -33,7 +33,7 @@
 		// from utils.js
 		$(document).ready(function () {
 			setUpListeners();
-			//start(10);
+			start(10);
 			WebSocketBegin();
 		});
 	</script>
@@ -67,7 +67,7 @@
 					
 					<div class="card-img-bottom bg-dark p-1" id="stream"></div>
 					<form class="bg-dark text-light">
-						<div class="form-group">
+						<div class="form-group" id="options_form">
 							<label for="size_select">Select size</label>
 							<select class="form-control bg-dark text-light" id="size_select">
 							</select>
@@ -77,7 +77,7 @@
 							<select class="form-control bg-dark text-light" id="fps_select">
 							</select>
 						  </div>
-						  <button type="submit" class="btn btn-primary mb-2">Change</button>
+						  <button type="submit" class="btn btn-primary mb-2" id="submit_btn">Change</button>
 					</form>
 				</div>
 			</div>

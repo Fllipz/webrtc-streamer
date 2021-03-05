@@ -31,11 +31,15 @@ def check_if_conection_p2p(addr):
 
 
 def kill_ffmpeg():
-    pid = int(subprocess.check_output(["pidof","ffmpeg"]))
-    subprocess.run(["kill",str(pid)])
+    try:
+        pid = int(subprocess.check_output(["pidof","ffmpeg"]))
+        subprocess.run(["kill",str(pid)])
+    except subprocess.CalledProcessError as e:
+        print("Error killing ffmpeg!")
 
 def run_ffmpeg(size, fps):
     subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', '/dev/video0', '-an', '-c:v', 'copy', '-f', 'rtp', 'rtp://localhost:8005' ])
+
 
 def find_between_strs( s, first, last ):
     try:
@@ -75,10 +79,12 @@ async def hello(websocket, path):
                 await websocket.send(json.dumps({"connection":1}))
             else:
                 await websocket.send(json.dumps({"connection":0}))
-        elif 'get_ffed_options' in data.keys():
-            await websocket.send(json.dumps({"options":0}))
-        print(get_feed_options())
-        await websocket.send(json.dumps(get_feed_options()))
+        elif 'get_feed_options' in data.keys():
+            await websocket.send(json.dumps(get_feed_options()))
+        elif 'change_feed' in data.keys():
+            kill_ffmpeg()
+            sleep(1)
+            run_ffmpeg(data['change_feed']['size'],data['change_feed']['fps'])
     
         
 
