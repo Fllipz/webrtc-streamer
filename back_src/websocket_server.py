@@ -37,9 +37,11 @@ def kill_ffmpeg():
     except subprocess.CalledProcessError as e:
         print("Error killing ffmpeg!")
 
-def run_ffmpeg(size, fps):
+def run_ffmpeg_h264(size, fps):
     subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', '/dev/video0', '-an', '-c:v', 'copy', '-f', 'rtp', 'rtp://localhost:8005' ])
 
+def run_ffmpeg_vp8(size,fps):
+    subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', '/dev/video0', '-codec:v', 'libvpx',  '-preset', 'ultrafast',  '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
 
 def find_between_strs( s, first, last ):
     try:
@@ -84,8 +86,12 @@ async def hello(websocket, path):
         elif 'change_feed' in data.keys():
             kill_ffmpeg()
             sleep(1)
-            run_ffmpeg(data['change_feed']['size'],data['change_feed']['fps'])
-    
+            if(data['change_feed']['protocol']=='H264'):
+                run_ffmpeg_h264(data['change_feed']['size'],data['change_feed']['fps'])
+            elif(data['change_feed']['protocol']=='VP8'):
+                run_ffmpeg_vp8(data['change_feed']['size'],data['change_feed']['fps'])
+            else:
+                await websocket.send(json.dumps({"error":"Error setting up ffmpeg"}))
         
 
 start_server = websockets.serve(hello, port=8001)

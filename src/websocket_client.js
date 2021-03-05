@@ -4,6 +4,7 @@ feed_options={};
 
 selected_size = null;
 selected_fps = null;
+protocol = null;
 
 window.addEventListener('beforeunload', (event) => {
     ws.close();
@@ -34,7 +35,7 @@ function setUpListeners(){
             alert("You need to chose desired size and fps to change stream parameters!");
         }else{
             stopStream();
-            ws.send(`{"change_feed":{"size": \"${selected_size}\"  ,  "fps": \"${selected_fps}\"}}`);
+            ws.send(`{"change_feed":{"size": \"${selected_size}\"  ,  "fps": \"${selected_fps}\" , "protocol" : \"${protocol}\" }}`);
         }
     })
 }
@@ -70,6 +71,8 @@ function WebSocketBegin() {
                 for (var i=0;i<sizes.length;i++) {
                     $select.append('<option value=' + sizes[i] + '>' + sizes[i]+ '</option>');
                 }
+            }else if(jsonObject.hasOwnProperty("error")){
+                alert(jsonObject["error"])
             }
         };
 

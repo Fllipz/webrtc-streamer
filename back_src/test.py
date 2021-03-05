@@ -38,4 +38,7 @@ def get_feed_options():
 
     return parsed
 
-get_feed_options()
+fps = "15"
+size = "640x480" 
+
+subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', '/dev/video2', '-codec:v', 'libvpx',  '-preset', 'ultrafast',  '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
