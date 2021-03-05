@@ -77,6 +77,23 @@ webrtc-streamer
 This overrides the TEST environment variable and makes the init-container.sh scrpit use mock pipelines.
 Gstreamer will generate a feed of a ball moving around the screen and forward it in place of camera feed.
 
+### P2P Connection
+In order to achieve low latency we take advantage of the Husarnet P2P connection establishment.
+If the stream is accessed from a host for which our connection is not P2P the quality of stream will degrade.
+You can check your connection status using:
+```bash
+sudo husarnet status
+```
+The demo site will also display a warning if it detects lack of P2P connection.
+In order to solve connection issues go to:
+https://husarnet.com/docs/tutorial-troubleshooting"
+
+### Changing stream parameters
+The demo page allows user to change stream parameters from default ones.
+In order to access possible stream options server runs and parses several system commands, same goes for changing stream parameters.
+As such this process may fail if You use a differen webcam which outputs data in different format.
+During testing we used a Logitech C920 camera.
+
 ## Result
 Runing above commands should result in the following output:
 ```bash
