@@ -49,11 +49,12 @@ def find_between_strs( s, first, last ):
         end = s.rindex( last, start )
         return s[start:end]
     except ValueError:
-        return ""
+        if start!=-1 and end==-1:
+            return s[start:]
 
 def get_feed_options():
     result = subprocess.run(['v4l2-ctl', '-d', '0', '--list-formats-ext', ],capture_output=True,text=True)
-    found = find_between_strs(result.stdout,"(H.264, compressed)","[2]")
+    found = find_between_strs(result.stdout,"(H.264, compressed)","[")
     chunks = found.split("Size: Discrete")
     parsed = {"options":{}}
     for chunk in chunks[1:]:
