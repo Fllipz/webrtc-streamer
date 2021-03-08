@@ -65,4 +65,20 @@ def get_feed_options():
 
     return parsed
 
-print(get_feed_options())
+addr = 'fc94:eaa2:5adf:91d4:d0ec:b14f:3968:f519'
+
+def check_if_conection_p2p(addr):
+    result = subprocess.run("sudo husarnet status", capture_output=True, shell=True, text=True)
+    start = result.stdout.find("Peer "+addr)
+    end = result.stdout.find("Peer ", start)
+    if start == -1:
+        return False
+    if end != -1:
+        found = result.stdout.find("tunnelled", start,end)
+    else:
+        found = result.stdout.find("tunnelled",start)
+    if found == -1:
+        return True
+    return False    
+
+print(check_if_conection_p2p(addr))

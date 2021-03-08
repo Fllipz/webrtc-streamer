@@ -7,6 +7,7 @@ import argparse
 import os
 import subprocess
 import re
+import ipaddress
 
 
 
@@ -16,8 +17,9 @@ event = asyncio.Event()
 loop = asyncio.get_event_loop() 
 
 def check_if_conection_p2p(addr):
-    result = subprocess.run("sudo husarnet status", capture_output=True, shell=True, text=True)
-    start = result.stdout.find("Peer "+addr)
+    result = subprocess.run(["sudo husarnet status"], capture_output=True, shell=True, text=True)
+    addr = ipaddress.ip_address(addr)
+    start = result.stdout.find(str(addr.exploded))
     end = result.stdout.find("Peer ", start)
     if start == -1:
         return False
@@ -25,7 +27,7 @@ def check_if_conection_p2p(addr):
         found = result.stdout.find("tunnelled", start,end)
     else:
         found = result.stdout.find("tunnelled",start)
-    if found == -1:
+    if found ==-1:
         return True
     return False
 
@@ -78,7 +80,7 @@ async def hello(websocket, path):
         data = json.loads(data)
         if 'check_connection' in data.keys():
             addr, port, a, b = websocket.remote_address
-            if(check_if_conection_p2p(addr)):
+            if check_if_conection_p2p(addr):
                 await websocket.send(json.dumps({"connection":1}))
             else:
                 await websocket.send(json.dumps({"connection":0}))
