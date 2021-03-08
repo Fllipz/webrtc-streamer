@@ -60,7 +60,13 @@ function WebSocketBegin() {
             var jsonObject = JSON.parse(evt.data);
             console.log(jsonObject);
             if(jsonObject.hasOwnProperty("connection")){
-                if(jsonObject['connection']==0)
+                if(jsonObject['connection']==0){
+                    $('#p2p_connection').append('<span>Peer-to-peer error. Forwarding traffic through a Base Server.</span>');
+                    $('#p2p_connection').append('<br>')
+                    $('#p2p_connection').append('<span> Visit <a href="https://husarnet.com/docs/tutorial-troubleshooting" a>https://husarnet.com/docs/tutorial-troubleshooting</a> to solve your connection issue</span>')
+                }else{
+                    $('#p2p_connection').append('<span>Peer-to-peer connection established</span>')
+                }
                 $('#p2p_connection').removeClass('invisible');
             }else if(jsonObject.hasOwnProperty("options")){
                 var $select = $('#size_select')
