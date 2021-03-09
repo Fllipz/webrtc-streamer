@@ -35,7 +35,6 @@ function setUpListeners(){
             $select.append('<option value=' + fps[fp] + '>' + fps[fp]+ '</option>');
         }
         selected_fps=fps[0];
-        console.log(selected_fps);
     });
     $('#fps_select').change(function(evt){
         selected_fps = evt.target.value;
@@ -64,6 +63,9 @@ function WebSocketBegin() {
             console.log("Websocket connected!");
             ws.send('{"check_connection": 1}');
             ws.send('{"get_feed_options": 1}');
+            setInterval(function(){
+                ws.send('{"check_connection": 1}');
+            },5000)
         };
 
         ws.onmessage = function (evt) {
@@ -71,6 +73,8 @@ function WebSocketBegin() {
             var jsonObject = JSON.parse(evt.data);
             console.log(jsonObject);
             if(jsonObject.hasOwnProperty("connection")){
+                $('#p2p_connection').find('span').remove();
+                $('#p2p_connection').find('br').remove();
                 if(jsonObject['connection']==0){
                     $('#p2p_connection').append('<span>Peer-to-peer error. Forwarding traffic through a Base Server.</span>');
                     $('#p2p_connection').append('<br>')
