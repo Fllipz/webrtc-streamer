@@ -91,8 +91,10 @@ async def hello(websocket, path):
             sleep(1)
             if(data['change_feed']['protocol']=='H264'):
                 run_ffmpeg_h264(data['change_feed']['size'],data['change_feed']['fps'])
+                await websocket.send(json.dumps({'stream_start':1}))
             elif(data['change_feed']['protocol']=='VP8'):
                 run_ffmpeg_vp8(data['change_feed']['size'],data['change_feed']['fps'])
+                await websocket.send(json.dumps({'stream_start':1}))
             else:
                 await websocket.send(json.dumps({"error":"Error setting up ffmpeg"}))
         

@@ -79,6 +79,8 @@ function WebSocketBegin() {
                 }
             }else if(jsonObject.hasOwnProperty("error")){
                 alert(jsonObject["error"])
+            }else if(jsonObject.hasOwnProperty("stream_start")){
+                 start(selected_stream);
             }
         };
 

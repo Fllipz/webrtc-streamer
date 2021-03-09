@@ -82,3 +82,13 @@ def check_if_conection_p2p(addr):
     return False    
 
 print(check_if_conection_p2p(addr))
+
+
+sudo docker run --rm -it \
+--env HOSTNAME='my-container-1' \
+--env JOINCODE='fc94:b01d:1803:8dd8:b293:5c7d:7639:932a/VjgYyudv8dVk8HCKY6svA3' \
+-v my-container-1-v:/var/lib/husarnet \
+-v /dev/net/tun:/dev/net/tun \
+--cap-add NET_ADMIN \
+--sysctl net.ipv6.conf.all.disable_ipv6=0 \
+docker-example
