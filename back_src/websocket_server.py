@@ -26,6 +26,10 @@ def check_if_webcam_outputs_h264_feed():
         return False
     return True
 
+
+is_h264_supported = check_if_webcam_outputs_h264_feed()
+
+
 def check_if_conection_p2p(addr):
     result = subprocess.run(["sudo husarnet status"], capture_output=True, shell=True, text=True)
     addr = ipaddress.ip_address(addr)
@@ -49,11 +53,19 @@ def kill_ffmpeg():
     except subprocess.CalledProcessError as e:
         print("Error killing ffmpeg!")
 
-def run_ffmpeg_h264(size, fps):
+def run_ffmpeg_h264_supported(size, fps):
     subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', device, '-an', '-c:v', 'copy', '-f', 'rtp', 'rtp://localhost:8005' ])
 
-def run_ffmpeg_vp8(size,fps):
+def run_ffmpeg_vp8_supported(size,fps):
     subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', device, '-codec:v', 'libvpx',  '-preset', 'ultrafast',  '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
+
+def run_ffmpeg_h264_not_supported(size, fps):
+    subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-input_format', 'mjpeg', '-i', device, '-an', '-c:v', 'libx264',  '-preset', 'ultrafast', '-tune', 'zerolatency', '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8005' ])
+
+def run_ffmpeg_vp8_not_supported(size,fps):
+    subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-input_format', 'mjpeg',  '-i', device, '-codec:v', 'libvpx',  '-preset', 'ultrafast',  '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
+
+
 
 def find_between_strs( s, first, last ):
     try:
@@ -61,10 +73,10 @@ def find_between_strs( s, first, last ):
         end = s.rindex( last, start )
         return s[start:end]
     except ValueError:
-        if start!=-1 and end==-1:
+        if start!=-1: 
             return s[start:]
 
-def get_feed_options():
+def get_feed_options_supported():
     result = subprocess.run(['v4l2-ctl', '-d', device, '--list-formats-ext', ],capture_output=True,text=True)
     found = find_between_strs(result.stdout,"(H.264, compressed)","[")
     chunks = found.split("Size: Discrete")
@@ -82,6 +94,25 @@ def get_feed_options():
 
     return parsed
 
+def get_feed_options_not_supported():
+    result = subprocess.run(['v4l2-ctl', '-d', device, '--list-formats-ext', ],capture_output=True,text=True)
+    found = find_between_strs(result.stdout,"(Motion-JPEG, compressed)","[")
+    chunks = found.split("Size: Discrete")
+    parsed = {"options":{}}
+    for chunk in chunks[1:]:
+        size = chunk.split('\n')[0]
+        i=0
+        parsed["options"][size] = {}
+        for line in chunk.split('\n')[1:]:
+            res = re.search(r'\((.*?) fps\)',line)
+            if res != None:
+                parsed["options"][size][i]=res.group(1)
+                i+=1
+        
+
+    return parsed
+
+
 
 
 async def hello(websocket, path):
@@ -95,18 +126,33 @@ async def hello(websocket, path):
             else:
                 await websocket.send(json.dumps({"connection":0}))
         elif 'get_feed_options' in data.keys():
-            await websocket.send(json.dumps(get_feed_options()))
+            if is_h264_supported:
+                await websocket.send(json.dumps(get_feed_options_supported()))
+            else:
+                await websocket.send(json.dumps(get_feed_options_not_supported()))
         elif 'change_feed' in data.keys():
             kill_ffmpeg()
             sleep(1)
-            if(data['change_feed']['protocol']=='H264'):
-                run_ffmpeg_h264(data['change_feed']['size'],data['change_feed']['fps'])
-                await websocket.send(json.dumps({'stream_start':1}))
-            elif(data['change_feed']['protocol']=='VP8'):
-                run_ffmpeg_vp8(data['change_feed']['size'],data['change_feed']['fps'])
-                await websocket.send(json.dumps({'stream_start':1}))
+            if is_h264_supported:
+                print("h264")
+                if(data['change_feed']['protocol']=='H264'):
+                    run_ffmpeg_h264_supported(data['change_feed']['size'],data['change_feed']['fps'])
+                    await websocket.send(json.dumps({'stream_start':1}))
+                elif(data['change_feed']['protocol']=='VP8'):
+                    run_ffmpeg_vp8_supported(data['change_feed']['size'],data['change_feed']['fps'])
+                    await websocket.send(json.dumps({'stream_start':1}))
+                else:
+                    await websocket.send(json.dumps({"error":"Error setting up ffmpeg"}))
             else:
-                await websocket.send(json.dumps({"error":"Error setting up ffmpeg"}))
+                print("MJPG")
+                if(data['change_feed']['protocol']=='H264'):
+                    run_ffmpeg_h264_not_supported(data['change_feed']['size'],data['change_feed']['fps'])
+                    await websocket.send(json.dumps({'stream_start':1}))
+                elif(data['change_feed']['protocol']=='VP8'):
+                    run_ffmpeg_vp8_not_supported(data['change_feed']['size'],data['change_feed']['fps'])
+                    await websocket.send(json.dumps({'stream_start':1}))
+                else:
+                    await websocket.send(json.dumps({"error":"Error setting up ffmpeg"}))
         
 
 start_server = websockets.serve(hello, port=8001)
