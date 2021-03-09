@@ -81,14 +81,15 @@ def check_if_conection_p2p(addr):
         return True
     return False    
 
-print(check_if_conection_p2p(addr))
+device = '/dev/video2'
+
+def check_if_webcam_outputs_h264_feed():
+    result = subprocess.run(['v4l2-ctl', '-d', device, '--list-formats-ext', ],capture_output=True,text=True)
+    to_find = "(H.264, compressed)"
+    index = result.stdout.find(to_find)
+    if index==-1:
+        return False
+    return True
 
 
-sudo docker run --rm -it \
---env HOSTNAME='my-container-1' \
---env JOINCODE='fc94:b01d:1803:8dd8:b293:5c7d:7639:932a/VjgYyudv8dVk8HCKY6svA3' \
--v my-container-1-v:/var/lib/husarnet \
--v /dev/net/tun:/dev/net/tun \
---cap-add NET_ADMIN \
---sysctl net.ipv6.conf.all.disable_ipv6=0 \
-docker-example
+print(check_if_webcam_outputs_h264_feed())

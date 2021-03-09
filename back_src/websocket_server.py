@@ -14,7 +14,17 @@ import ipaddress
 from time import sleep
 
 event = asyncio.Event()
-loop = asyncio.get_event_loop() 
+loop = asyncio.get_event_loop()
+
+device = '/dev/video0'
+
+def check_if_webcam_outputs_h264_feed():
+    result = subprocess.run(['v4l2-ctl', '-d', device, '--list-formats-ext', ],capture_output=True,text=True)
+    to_find = "(H.264, compressed)"
+    index = result.stdout.find(to_find)
+    if index==-1:
+        return False
+    return True
 
 def check_if_conection_p2p(addr):
     result = subprocess.run(["sudo husarnet status"], capture_output=True, shell=True, text=True)
@@ -40,10 +50,10 @@ def kill_ffmpeg():
         print("Error killing ffmpeg!")
 
 def run_ffmpeg_h264(size, fps):
-    subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', '/dev/video0', '-an', '-c:v', 'copy', '-f', 'rtp', 'rtp://localhost:8005' ])
+    subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', device, '-an', '-c:v', 'copy', '-f', 'rtp', 'rtp://localhost:8005' ])
 
 def run_ffmpeg_vp8(size,fps):
-    subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', '/dev/video0', '-codec:v', 'libvpx',  '-preset', 'ultrafast',  '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
+    subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', device, '-codec:v', 'libvpx',  '-preset', 'ultrafast',  '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
 
 def find_between_strs( s, first, last ):
     try:
@@ -55,7 +65,7 @@ def find_between_strs( s, first, last ):
             return s[start:]
 
 def get_feed_options():
-    result = subprocess.run(['v4l2-ctl', '-d', '0', '--list-formats-ext', ],capture_output=True,text=True)
+    result = subprocess.run(['v4l2-ctl', '-d', device, '--list-formats-ext', ],capture_output=True,text=True)
     found = find_between_strs(result.stdout,"(H.264, compressed)","[")
     chunks = found.split("Size: Discrete")
     parsed = {"options":{}}
