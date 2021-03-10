@@ -149,7 +149,7 @@ def initial_feed_setup(size,fps):
             run_ffmpeg_vp8_test(size,fps)
 
 
-initial_feed_setup("320x240","30.000")    
+initial_feed_setup("320x240","15.000")    
 
 
 async def hello(websocket, path):
