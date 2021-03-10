@@ -81,7 +81,7 @@ def check_if_conection_p2p(addr):
         return True
     return False    
 
-device = '/dev/video0'
+device = '/dev/video2'
 
 def check_if_webcam_outputs_h264_feed():
     result = subprocess.run(['v4l2-ctl', '-d', device, '--list-formats-ext', ],capture_output=True,text=True)
@@ -95,10 +95,10 @@ def check_if_webcam_outputs_h264_feed():
 print(check_if_webcam_outputs_h264_feed())
 
 def run_ffmpeg_h264_not_supported(size, fps):
-    subprocess.Popen(['ffmpeg', '-f', 'v4l2',  '-input_format', 'mjpeg', '-framerate', fps, '-video_size', size, '-i', device, '-an', '-c:v', 'libx264',  '-preset', 'ultrafast', '-tune', 'zerolatency', '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8005' ])
+    subprocess.Popen(['ffmpeg', '-f', 'v4l2',  '-framerate', fps, '-video_size', size, '-i', device, '-an', '-c:v', 'libx264',  '-preset', 'ultrafast', '-tune', 'zerolatency', '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8005' ])
 
 def run_ffmpeg_vp8_not_supported(size,fps):
-    subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-input_format', 'mjpeg', '-framerate', fps, '-video_size', size, '-i', device, '-codec:v', 'libvpx',  '-preset', 'ultrafast',  '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
+    subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-i', device, '-codec:v', 'libvpx',  '-preset', 'ultrafast',  '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
 
 
 def run_ffmpeg_h264_test(size, fps):
@@ -110,4 +110,4 @@ def run_ffmpeg_vp8_test(size,fps):
 
 
 #kill_ffmpeg()
-run_ffmpeg_vp8_not_supported(' 320x240',' 15.000')
+run_ffmpeg_vp8_not_supported(' 320x240',' 30.000')
