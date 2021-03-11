@@ -3,7 +3,7 @@ var ws;
 feed_options={};
 
 selected_size = '320x240';
-selected_fps = '15.000';
+selected_fps = '30.000';
 protocol = null;
 
 window.addEventListener('beforeunload', (event) => {
