@@ -86,7 +86,7 @@ def run_ffmpeg_vp8_test(size,fps):
     subprocess.Popen(['ffmpeg', '-re', '-f', 'lavfi',  '-i', 'testsrc=size='+size.lstrip()+':rate='+fps.lstrip(), '-c:v', 'libvpx', '-b:v', '1600k', '-preset', 'ultrafast',   '-b', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
 
 def run_ffmpeg_audio(card_num):
-    subprocess.Popen(['ffmpeg',  '-f', 'alsa', '-i', 'hw:'+card_num, '-acodec', 'libopus', '-ab', '16k',  '-f', 'rtp', 'rtp://localhost:8007'])
+    subprocess.Popen(['ffmpeg',  '-f', 'alsa', '-ac', '1', '-i', 'hw:'+card_num, '-acodec', 'libopus', '-ab', '16k',  '-f', 'rtp', 'rtp://localhost:8007'])
 
 def get_audiocard_id():
     result = subprocess.run([ 'arecord', '-l'],capture_output=True,text=True)
