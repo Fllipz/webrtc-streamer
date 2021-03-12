@@ -19,6 +19,7 @@ media.peerconnection.ice.obfuscate_host_addresses -> false
    to reencode the stream in ffmpeg, lowering latency. However when streaming VP8 codec there is a need for encoding the stream in ffmpeg which makes latency higher. During testing vlatency vaules for H264 codec were around 400ms whereas 
    for tge VP8 codec it was cloaser to 1s.
 
+
 ## Build Image
 Ensure bash scrpits are executable:
 ```bash
@@ -38,23 +39,34 @@ Then install it as such:
 sudo dpkg -i libseccomp2_2.4.3-1+b1_armhf.deb
 ```
 
-## Start container
-```bash
-sudo docker run --rm -it \
---env HOSTNAME='webrtc-streamer-1' \
---env JOINCODE='fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx' \
--v webrtc-streamer_v:/var/lib/husarnet \
--v /dev/net/tun:/dev/net/tun \
---device=/dev/video0:/dev/video0  \
---cap-add NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0 \
-webrtc-streamer
+## Create `.env` File:
+
+```
+HOSTNAME=webrtc-streamer-1
+JOINCODE=fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx
+CODEC=H264
 ```
 
 description:
 - `HOSTNAME='docker-vpn-1'` - is an easy to use hostname, that you can use instead of Husarnet IPv6 addr to access your container over the internet
 - `JOINCODE='fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx'` - is an unique Join Code from your Husarnet network. You will find it at **https://app.husarnet.com -> choosen network -> `[Add element]` button ->  `join code` tab**
-- `-v my-container-1-v:/var/lib/husarnet` - you need to make `/var/lib/husarnet` as a volume to preserve it's state for example if you would like to update the image your container is based on. If you would like to run multiple containers on your host machine remember to provide unique volume name for each container (in our case `HOSTNAME-v`).
-- `--device=/dev/video0:/dev/video0` - you need to give the container access to your webcam in this case /dev/video0 which will be referenced in the pipline.sh script as /dev/video0
+
+## Start container
+```bash
+sudo docker run --rm -it \
+--env-file ./.env \
+--volume webrtc_streamer_v:/var/lib/husarnet \
+--volume /dev/net/tun:/dev/net/tun \
+--device /dev/video0:/dev/video0  \
+--device /dev/snd \
+--cap-add NET_ADMIN \
+--sysctl net.ipv6.conf.all.disable_ipv6=0 \
+webrtc-streamer
+```
+
+description:
+- `--volume webrtc_streamer_v:/var/lib/husarnet` - you need to make `/var/lib/husarnet` as a volume to preserve it's state for example if you would like to update the image your container is based on. If you would like to run multiple containers on your host machine remember to provide unique volume name for each container (in our case `HOSTNAME-v`).
+- `--device /dev/video0:/dev/video0` - you need to give the container access to your webcam in this case /dev/video0 which will be referenced in the pipline.sh script as /dev/video0
 
 ### H264 support detection
 Server detects if video device supports h264 encoded feed if so it makes ffmpeg use the h264 feed from device otherwise
