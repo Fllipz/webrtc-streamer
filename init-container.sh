@@ -75,15 +75,19 @@ then
 if [[ ${CODEC} == H264 ]];
 then
 cp -f /var/www/html/h264.html /var/www/html/index.html
+mv -f  /opt/janus/etc/janus/janus.plugin.streaming.h264.jcfg  /opt/janus/etc/janus/janus.plugin.streaming.jcfg 
 else
 cp -f /var/www/html/vp8.html /var/www/html/index.html
+mv -f  /opt/janus/etc/janus/janus.plugin.streaming.vp8.jcfg  /opt/janus/etc/janus/janus.plugin.streaming.jcfg 
 fi
 else
 if [[ ${CODEC} == H264 ]];
 then
 cp -f /var/www/html/h264.html /var/www/html/index.html
+mv -f  /opt/janus/etc/janus/janus.plugin.streaming.h264.jcfg  /opt/janus/etc/janus/janus.plugin.streaming.jcfg 
 else
 cp -f /var/www/html/vp8.html /var/www/html/index.html
+mv -f  /opt/janus/etc/janus/janus.plugin.streaming.vp8.jcfg  /opt/janus/etc/janus/janus.plugin.streaming.jcfg 
 fi
 fi
 python3 websocket_server.py &

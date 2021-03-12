@@ -22,6 +22,7 @@ device = '/dev/video0'
 import os
 ENV_codec = os.environ['CODEC']
 ENV_test = os.environ['TEST']
+ENV_audio = os.environ['AUDIO']
 
 
 
@@ -55,8 +56,14 @@ def check_if_conection_p2p(addr):
 
 def kill_ffmpeg():
     try:
-        pid = int(subprocess.check_output(["pidof","ffmpeg"]))
-        subprocess.run(["kill",str(pid)])
+        res =  str(subprocess.check_output(["pidof","ffmpeg"]))
+        pids = re.findall(r'\d+', res)
+        print("here")
+        print(pids)
+        for pid in pids:
+            print("killed:"+pid)
+            subprocess.run(["kill",pid])
+
     except subprocess.CalledProcessError as e:
         print("Error killing ffmpeg!")
 
@@ -78,6 +85,12 @@ def run_ffmpeg_h264_test(size, fps):
 def run_ffmpeg_vp8_test(size,fps):
     subprocess.Popen(['ffmpeg', '-re', '-f', 'lavfi',  '-i', 'testsrc=size='+size.lstrip()+':rate='+fps.lstrip(), '-c:v', 'libvpx', '-b:v', '1600k', '-preset', 'ultrafast',   '-b', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
 
+def run_ffmpeg_audio(card_num):
+    subprocess.Popen(['ffmpeg',  '-f', 'alsa', '-i', 'hw:'+card_num, '-acodec', 'libopus', '-ab', '16k',  '-f', 'rtp', 'rtp://localhost:8007'])
+
+
+
+audio_card_id = '2'
 
 def find_between_strs( s, first, last ):
     try:
@@ -147,6 +160,8 @@ def initial_feed_setup(size,fps):
         else:
             print("vp8_test")
             run_ffmpeg_vp8_test(size,fps)
+    if ENV_audio=='true':
+        run_ffmpeg_audio(audio_card_id)
 
 
 initial_feed_setup("320x240","30.000")    
@@ -159,9 +174,9 @@ async def hello(websocket, path):
         if 'check_connection' in data.keys():
             addr, port, a, b = websocket.remote_address
             if check_if_conection_p2p(addr):
-                await websocket.send(json.dumps({"connection":1}))
+                await websocket.send(json.dumps({"connection":1,"allow_base":os.environ['ENABLE_BASE_SERVER_FORWARDING']}))
             else:
-                await websocket.send(json.dumps({"connection":0}))
+                await websocket.send(json.dumps({"connection":0,"allow_base":os.environ['ENABLE_BASE_SERVER_FORWARDING']}))
         elif 'get_feed_options' in data.keys():
             if is_h264_supported:
                 await websocket.send(json.dumps(get_feed_options_supported()))
@@ -170,6 +185,8 @@ async def hello(websocket, path):
         elif 'change_feed' in data.keys():
             kill_ffmpeg()
             sleep(1)
+            if ENV_audio=='true':
+                run_ffmpeg_audio(audio_card_id)
             if ENV_test=="false":
                 if is_h264_supported:
                     if ENV_codec=='H264':

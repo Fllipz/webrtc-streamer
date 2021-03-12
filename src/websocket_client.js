@@ -76,6 +76,9 @@ function WebSocketBegin() {
                 $('#p2p_connection').find('span').remove();
                 $('#p2p_connection').find('br').remove();
                 if(jsonObject['connection']==0){
+                    if(jsonObject['allow_base']==0){
+                        stopStream();
+                    }
                     $('#p2p_connection').append('<span>Peer-to-peer error. Forwarding traffic through a Base Server.</span>');
                     $('#p2p_connection').append('<br>')
                     $('#p2p_connection').append('<span> Visit <a href="https://husarnet.com/docs/tutorial-troubleshooting" a>https://husarnet.com/docs/tutorial-troubleshooting</a> to solve your connection issue</span>')

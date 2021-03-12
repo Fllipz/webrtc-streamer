@@ -135,7 +135,10 @@ vp8-sample: {
 	id = 11
 	description = "Opus/VP8 live stream coming from external source"
 	metadata = "You can use this metadata section to put any info you want!"
-	audio = false
+	audio = true
+	audioport = 8007
+	audiopt = 10
+	audiortpmap = "opus/48000/2"
 	video = true
 	videoport = 8006
 	videopt = 100
@@ -187,19 +190,22 @@ vp8-sample: {
 # example of how to create a simple H.264 mountpoint: you can feed it via
 # an x264enc+rtph264pay pipeline in gstreamer, an ffmpeg script or other.
 #
-h264-sample: {
-	type = "rtp"
-	id = 10
-	description = "H.264 live stream coming from gstreamer"
-	metadata = "You can use this metadata section to put any info you want!"
-	audio = false
-	video = true
-	videoport = 8005
-	videopt = 96
-	videortpmap = "H264/90000"
-	videofmtp = "profile-level-id=42e01f;packetization-mode=1"
-	secret = "adminpwd"
-}
+#h264-sample: {
+#	type = "rtp"
+#	id = 10
+#	description = "H.264 live stream coming from gstreamer"
+#	metadata = "You can use this metadata section to put any info you want!"
+#	audio = true
+#	audioport = 8007
+#	audiopt = 10
+#	audiortpmap = "opus/48000/2"
+#	video = true
+#	videoport = 8005
+#	videopt = 96
+#	videortpmap = "H264/90000"
+#	videofmtp = "profile-level-id=42e01f;packetization-mode=1"
+#	secret = "adminpwd"
+#}
 
 #
 # The Streaming plugin also supports the broadcasting of datachannel

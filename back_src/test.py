@@ -92,10 +92,10 @@ def check_if_webcam_outputs_h264_feed():
     return True
 
 
-print(check_if_webcam_outputs_h264_feed())
+
 
 def run_ffmpeg_h264_not_supported(size, fps):
-    subprocess.Popen(['ffmpeg', '-f', 'v4l2',   '-framerate', fps, '-video_size', size, '-i', device, '-an', '-c:v', 'libx264',  '-preset', 'ultrafast', '-tune', 'zerolatency', '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8005' ])
+    subprocess.Popen(['ffmpeg','-f', 'v4l2',   '-framerate', fps, '-video_size', size, '-i', device, '-an', '-c:v', 'libx264',  '-preset', 'ultrafast', '-tune', 'zerolatency', '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8005' ])
 
 def run_ffmpeg_vp8_not_supported(size,fps):
     subprocess.Popen(['ffmpeg', '-f', 'v4l2',  '-framerate', fps, '-video_size', size, '-i', device, '-codec:v', 'libvpx',  '-preset', 'ultrafast',  '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
@@ -107,7 +107,15 @@ def run_ffmpeg_h264_test(size, fps):
 def run_ffmpeg_vp8_test(size,fps):
     subprocess.Popen(['ffmpeg', '-re', '-f', 'lavfi',  '-i', 'testsrc=size='+size.lstrip()+':rate='+fps.lstrip(), '-c:v', 'libvpx', '-b:v', '1600k', '-preset', 'ultrafast',   '-b', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
 
+def run_ffmpeg_audio(card_num):
+    subprocess.Popen(['ffmpeg',  '-f', 'alsa', '-i', 'hw:'+card_num, '-acodec', 'libopus', '-ab', '16k',  '-f', 'rtp', 'rtp://localhost:8007'])
 
+def get_audiocard_id():
+    result = subprocess.run([ 'arecord', '-l'],capture_output=True,text=True)
+    string = result.stdout
+    string = string[string.find('card')+4:string.find('card')+6]
+    return string
 
 #kill_ffmpeg()
-run_ffmpeg_vp8_not_supported(' 320x240',' 15.000')
+#run_ffmpeg_h264_not_supported(' 320x240',' 30.000')
+run_ffmpeg_audio(get_audiocard_id())
