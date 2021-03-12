@@ -88,9 +88,15 @@ def run_ffmpeg_vp8_test(size,fps):
 def run_ffmpeg_audio(card_num):
     subprocess.Popen(['ffmpeg',  '-f', 'alsa', '-i', 'hw:'+card_num, '-acodec', 'libopus', '-ab', '16k',  '-f', 'rtp', 'rtp://localhost:8007'])
 
+def get_audiocard_id():
+    result = subprocess.run([ 'arecord', '-l'],capture_output=True,text=True)
+    string = result.stdout
+    string = string[string.find('card')+4:string.find('card')+6]
+    return string
 
 
-audio_card_id = '2'
+
+audio_card_id = get_audiocard_id()
 
 def find_between_strs( s, first, last ):
     try:

@@ -78,7 +78,7 @@ RUN apt install python3.8 -y && \
     apt install python-pkg-resources python3-pkg-resources -y && \
     apt install python3-pip -y && \
     pip3 install websockets
-
+RUN apt-get install -y alsa-utils
 # Find your JOINCODE at https://app.husarnet.com
 ENV JOINCODE=""
 ENV HOSTNAME=my-container-1

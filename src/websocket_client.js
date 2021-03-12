@@ -6,6 +6,7 @@ selected_size = '320x240';
 selected_fps = '30.000';
 protocol = null;
 
+
 window.addEventListener('beforeunload', (event) => {
     ws.close();
     // Cancel the event as stated by the standard.
@@ -14,7 +15,14 @@ window.addEventListener('beforeunload', (event) => {
     event.returnValue = '';
 });
 
+
+
 function setUpListeners(){
+    $('#audio_btn').click(function(evt){
+                                           
+    document.getElementById("remotevideo").mute=false;
+    document.getElementById("remotevideo").volume=0.5;
+    })
     var $select_s = $('#size_select');
     $select_s.val(selected_size);
     var $select = $('#fps_select');
