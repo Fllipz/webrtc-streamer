@@ -69,8 +69,12 @@ function WebSocketBegin() {
         ws.onopen = function () {
             // Web Socket is connected
             console.log("Websocket connected!");
+
+            // check whether ENV CODEC=H264 or ENV CODEC=VP8 - there is no way to directly access ENV in .js file
+            ws.send('{"check_compression": 1}');
+            
+            // check if connection is p2p or tunnelled
             ws.send('{"check_connection": 1}');
-            ws.send('{"get_feed_options": 1}');
             setInterval(function(){
                 ws.send('{"check_connection": 1}');
             },2000)
@@ -94,6 +98,21 @@ function WebSocketBegin() {
                     $('#p2p_connection').append('<span>Peer-to-peer connection established</span>')
                 }
                 $('#p2p_connection').removeClass('invisible');
+            }else if(jsonObject.hasOwnProperty("env_codec")){
+                // get available camera resolutions and FPS options
+                ws.send('{"get_feed_options": 1}');
+
+                if(jsonObject['env_codec']=='h264'){
+                    // from utils.js
+                    selected_stream=10;
+                    protocol = "H264";
+                    start(selected_stream);
+                }else {
+                    // from utils.js
+                    selected_stream=11;
+                    protocol = "VP8";
+                    start(selected_stream);
+                }
             }else if(jsonObject.hasOwnProperty("options")){
                 var $select = $('#size_select')
                 feed_options = jsonObject;

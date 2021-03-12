@@ -188,6 +188,11 @@ async def hello(websocket, path):
                 await websocket.send(json.dumps(get_feed_options_supported()))
             else:
                 await websocket.send(json.dumps(get_feed_options_not_supported()))
+        elif 'check_compression' in data.keys():
+            if ENV_codec=='H264':
+                await websocket.send(json.dumps({'env_codec':'h264'}))
+            else:
+                await websocket.send(json.dumps({'env_codec':'vp8'}))
         elif 'change_feed' in data.keys():
             kill_ffmpeg()
             sleep(1)
