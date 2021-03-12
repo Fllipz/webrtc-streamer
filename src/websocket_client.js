@@ -18,11 +18,24 @@ window.addEventListener('beforeunload', (event) => {
 
 
 function setUpListeners(){
-    $('#audio_btn').click(function(evt){
-                                           
+    $('#audio_btn').click(function(evt){     
+        console.log("audio click");
+        if(document.getElementById("remotevideo").mute==true) {                               
+            document.getElementById("remotevideo").mute=false;
+            document.getElementById("remotevideo").volume=0.5;
+            document.getElementById("audio_btn").innerHTML = "<i class=\"fas fa-volume-up\"></i>";
+            console.log("unmute");
+        } else {
+            document.getElementById("remotevideo").mute=true;
+            document.getElementById("remotevideo").volume=0.0;
+            document.getElementById("audio_btn").innerHTML = "<i class=\"fas fa-volume-mute\"></i>";
+            console.log("mute");
+        }
+    })
     document.getElementById("remotevideo").mute=false;
     document.getElementById("remotevideo").volume=0.5;
-    })
+    document.getElementById("audio_btn").innerHTML = "<i class=\"fas fa-volume-up\"></i>"; 
+
     var $select_s = $('#size_select');
     $select_s.val(selected_size);
     var $select = $('#fps_select');
@@ -61,6 +74,7 @@ function setUpListeners(){
 
 function WebSocketBegin() {
     if ("WebSocket" in window) {
+
         // Let us open a web socket
         ws = new WebSocket(
             location.hostname.match(/\.husarnetusers\.com$/) ? "wss://" + location.hostname + "/__port_8001/" : "ws://" + location.hostname + ":8001"
@@ -72,12 +86,12 @@ function WebSocketBegin() {
 
             // check whether ENV CODEC=H264 or ENV CODEC=VP8 - there is no way to directly access ENV in .js file
             ws.send('{"check_compression": 1}');
-            
+
             // check if connection is p2p or tunnelled
             ws.send('{"check_connection": 1}');
             setInterval(function(){
                 ws.send('{"check_connection": 1}');
-            },2000)
+            },5000)
         };
 
         ws.onmessage = function (evt) {
