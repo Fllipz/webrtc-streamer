@@ -23,6 +23,7 @@ import os
 ENV_codec = os.environ['CODEC']
 ENV_test = os.environ['TEST']
 ENV_audio = os.environ['AUDIO']
+ENV_audio_channels = os.environ['CAM_AUDIO_CHANNELS']
 
 
 
@@ -86,8 +87,11 @@ def run_ffmpeg_vp8_test(size,fps):
     subprocess.Popen(['ffmpeg', '-re', '-f', 'lavfi',  '-i', 'testsrc=size='+size.lstrip()+':rate='+fps.lstrip(), '-c:v', 'libvpx', '-b:v', '1600k', '-preset', 'ultrafast',   '-b', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
 
 def run_ffmpeg_audio(card_num):
-    subprocess.Popen(['ffmpeg',  '-f', 'alsa', '-ac', '1', '-i', 'hw:'+card_num, '-acodec', 'libopus', '-ab', '16k',  '-f', 'rtp', 'rtp://localhost:8007'])
-
+    # more about '-ac' options: https://trac.ffmpeg.org/wiki/AudioChannelManipulation
+    # all ffmpeg flags: https://gist.github.com/tayvano/6e2d456a9897f55025e25035478a3a50
+    # good article about ALSA: https://trac.ffmpeg.org/wiki/Capture/ALSA 
+    subprocess.Popen(['ffmpeg',  '-f', 'alsa', '-ac', ENV_audio_channels, '-i', 'hw:'+card_num, '-acodec', 'libopus', '-ab', '16k',  '-f', 'rtp', 'rtp://localhost:8007'])
+    
 def get_audiocard_id():
     result = subprocess.run([ 'arecord', '-l'],capture_output=True,text=True)
     string = result.stdout
@@ -173,7 +177,7 @@ def initial_feed_setup(size,fps):
 initial_feed_setup("320x240","30.000")    
 
 
-async def hello(websocket, path):
+async def ws_handler(websocket, path):
     while(True):
         data = await websocket.recv()
         data = json.loads(data)
@@ -223,7 +227,7 @@ async def hello(websocket, path):
 
             
 
-start_server = websockets.serve(hello, port=8001)
+start_server = websockets.serve(ws_handler, port=8001)
 
 loop.run_until_complete(start_server)
 loop.run_forever()
