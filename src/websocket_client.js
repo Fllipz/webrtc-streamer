@@ -32,9 +32,6 @@ function setUpListeners(){
             console.log("mute");
         }
     })
-    document.getElementById("remotevideo").mute=false;
-    document.getElementById("remotevideo").volume=0.5;
-    document.getElementById("audio_btn").innerHTML = "<i class=\"fas fa-volume-up\"></i>"; 
 
     var $select_s = $('#size_select');
     $select_s.val(selected_size);
