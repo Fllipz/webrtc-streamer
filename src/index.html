@@ -7,6 +7,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>WebRTC Demo</title>
 
+	<!-- Font Awesome 5 -->
+	<link rel="stylesheet" href="/fontawesome/css/all.css" />
+
 	<!-- Janus dependencies -->
 	<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/7.4.0/adapter.min.js"></script>
@@ -14,9 +17,6 @@
 	<script type="text/javascript" src="janus.js"></script>
 	<script type="text/javascript" src="utils.js"></script>
 	<script type="text/javascript" src="websocket_client.js"></script>
-
-	<!-- Font Awesome 5 -->
-    <link rel="stylesheet" href="/fontawesome/css/all.css" />
 
 	<!-- Bootstrap 4 dependencies -->
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -56,8 +56,8 @@
 							<span class="badge badge-pill badge-success" id="curres"></span>
 							<span class="badge badge-pill badge-warning" id="curbitrate"></span>
 						</p>
-						<button class="btn btn-primary" id="audio_btn">Audio</i></button>
-						<button class="btn btn-primary" autocomplete="off" id="watch">Watch</button>
+						<button class="btn btn-primary" id="audio_btn"><i class="fas fa-volume-mute"></i></button>
+						<button class="btn btn-primary" autocomplete="off" id="watch"><i class="fas fa-video"></i></button>
 					</div>
 					<div class="card-body bg-dark text-light" id="p2p_connection">
 					</div>

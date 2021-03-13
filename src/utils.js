@@ -106,7 +106,7 @@ function  start(streamNum) {
                                                 Janus.debug("Got SDP!", jsep);
                                                 var body = { request: "start" };
                                                 streaming.send({ message: body, jsep: jsep });
-                                                $('#watch').html("Stop").removeAttr('disabled').click(stopStream);
+                                                $('#watch').html("<i class=\"fas fa-video\"></i>").removeAttr('disabled').click(stopStream);
                                             },
                                             error: function(error) {
                                                 Janus.error("WebRTC error:", error);
@@ -182,6 +182,10 @@ function  start(streamNum) {
                                             $('#curres').removeClass('hide').text(width+'x'+height).show();
                                     }, 1000);
                                 }
+
+                                //TODO: added temporary
+                                document.getElementById("remotevideo").mute=true;
+                                document.getElementById("remotevideo").volume=0.0;
                             },
                             ondataopen: function(data) {
                                 Janus.log("The DataChannel is available!");
@@ -320,7 +324,7 @@ function stopStream() {
 	streaming.hangup();
 	$('#streamset').removeAttr('disabled');
 	$('#streamslist').removeAttr('disabled');
-	$('#watch').html("Start").removeAttr('disabled').unbind('click').click(startStream);
+	$('#watch').html("<i class=\"fas fa-video-slash\"></i>").removeAttr('disabled').unbind('click').click(startStream);
 	$('#status').empty().hide();
 	$('#bitrate').attr('disabled', true);
 	$('#bitrateset').html('Bandwidth<span class="caret"></span>');

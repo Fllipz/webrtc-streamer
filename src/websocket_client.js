@@ -22,7 +22,7 @@ function setUpListeners(){
         console.log("audio click");
         if(document.getElementById("remotevideo").mute==true) {                               
             document.getElementById("remotevideo").mute=false;
-            document.getElementById("remotevideo").volume=0.5;
+            document.getElementById("remotevideo").volume=1.0;
             document.getElementById("audio_btn").innerHTML = "<i class=\"fas fa-volume-up\"></i>";
             console.log("unmute");
         } else {
