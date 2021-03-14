@@ -309,7 +309,9 @@ function startStream() {
 	$('#stream').append('<video class="rounded centered" id="waitingvideo" width="100%" height="100%" />');
 	if(spinner == null) {
 		var target = document.getElementById('stream');
-		spinner = new Spinner({top:100}).spin(target);
+        // var target = document.getElementById('main-card');
+		// spinner = new Spinner({top:100}).spin(target);
+        spinner = new Spinner().spin(target);
 	} else {
 		spinner.spin();
 	}
