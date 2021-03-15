@@ -104,7 +104,7 @@ function WebSocketBegin() {
                     }
                     $('#p2p_connection').append('<span>Peer-to-peer error. Forwarding traffic through a Base Server.</span>');
                     $('#p2p_connection').append('<br>')
-                    $('#p2p_connection').append('<span> Visit <a href="https://husarnet.com/docs/tutorial-troubleshooting" a>https://husarnet.com/docs/tutorial-troubleshooting</a> to solve your connection issue</span>')
+                    $('#p2p_connection').append('<span> Visit <a href="https://husarnet.com/docs/tutorial-troubleshooting" style="position: relative; z-index: 20px;"a>https://husarnet.com/docs/tutorial-troubleshooting</a> to solve your connection issue</span>')
                 }else{
                     $('#p2p_connection').append('<span>Peer-to-peer connection established</span>')
                 }
