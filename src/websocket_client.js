@@ -88,7 +88,7 @@ function WebSocketBegin() {
             ws.send('{"check_connection": 1}');
             setInterval(function(){
                 ws.send('{"check_connection": 1}');
-            },5000)
+            },2000)
         };
 
         ws.onmessage = function (evt) {
