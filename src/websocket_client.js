@@ -102,11 +102,15 @@ function WebSocketBegin() {
                     if(jsonObject['allow_base']==0){
                         stopStream();
                     }
-                    $('#p2p_connection').append('<span>Peer-to-peer error. Forwarding traffic through a Base Server.</span>');
+                    $('#p2p_connection').append('<span>😬 <b>No Peer-to-Peer connection</b></span>');
                     $('#p2p_connection').append('<br>')
-                    $('#p2p_connection').append('<span> Visit <a href="https://husarnet.com/docs/tutorial-troubleshooting" style="position: relative; z-index: 20px;"a>https://husarnet.com/docs/tutorial-troubleshooting</a> to solve your connection issue</span>')
+                    $('#p2p_connection').append('<span>👉 Visit <a href="https://husarnet.com/docs/tutorial-troubleshooting" style="position: relative; z-index: 20px;"a>a troubleshooting guide</a> to solve the issues.</span>');
+                    $('#p2p_connection').append('<br>')
+                    $('#p2p_connection').append('<span>👉 Most common reason: you are behind Carrier-Grade NAT (CGN or CGNAT) or other kind of "double NAT".</span>');
+                    $('#p2p_connection').append('<br>')
+                    $('#p2p_connection').append('<span>👉 Web server is available thanks to failover proxy connection over Husarnet Base Server. Only WebRTC stream is turned off. </span>')
                 }else{
-                    $('#p2p_connection').append('<span>Peer-to-peer connection established</span>')
+                    $('#p2p_connection').append('<span>🚀 <b>Peer-to-peer connection established</b></span>')
                 }
                 $('#p2p_connection').removeClass('invisible');
             }else if(jsonObject.hasOwnProperty("env_codec")){
