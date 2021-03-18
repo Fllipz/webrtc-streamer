@@ -71,10 +71,15 @@ echo ""
 nginx
 print_instruction < <(husarnet status)
 
-if [[ ${CODEC} == H264 ]];
+SUPPORTED=$( python3 check_support.py) 
+
+
+if [[ ${SUPPORTED} == 'True' ]];
 then
+echo "H264"
 mv -f  /opt/janus/etc/janus/janus.plugin.streaming.h264.jcfg  /opt/janus/etc/janus/janus.plugin.streaming.jcfg 
 else
+echo "VP8"
 mv -f  /opt/janus/etc/janus/janus.plugin.streaming.vp8.jcfg  /opt/janus/etc/janus/janus.plugin.streaming.jcfg 
 fi
 

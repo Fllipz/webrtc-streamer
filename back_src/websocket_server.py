@@ -20,7 +20,6 @@ device = '/dev/video0'
 
 
 import os
-ENV_codec = os.environ['CODEC']
 ENV_test = os.environ['TEST']
 ENV_audio = os.environ['AUDIO']
 ENV_audio_channels = os.environ['CAM_AUDIO_CHANNELS']
@@ -71,17 +70,8 @@ def kill_ffmpeg():
 def run_ffmpeg_h264_supported(size, fps):
     subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', device, '-an', '-c:v', 'copy', '-f', 'rtp', 'rtp://localhost:8005' ])
 
-def run_ffmpeg_vp8_supported(size,fps):
-    subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', device, '-codec:v', 'libvpx',  '-preset', 'ultrafast',  '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
-
-def run_ffmpeg_h264_not_supported(size, fps):
-    subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-i', device, '-an', '-c:v', 'libx264',  '-preset', 'ultrafast', '-tune', 'zerolatency', '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8005' ])
-
 def run_ffmpeg_vp8_not_supported(size,fps):
     subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size,  '-i', device, '-codec:v', 'libvpx',  '-preset', 'ultrafast',  '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
-
-def run_ffmpeg_h264_test(size, fps):
-    subprocess.Popen(['ffmpeg', '-re', '-f', 'lavfi',  '-i', 'testsrc=size='+size.lstrip()+':rate='+fps.lstrip(), '-c:v', 'libx264', '-b:v', '1600k', '-preset', 'ultrafast',  '-tune', 'zerolatency',   '-b', '1000k', '-f', 'rtp', 'rtp://localhost:8005'])
 
 def run_ffmpeg_vp8_test(size,fps):
     subprocess.Popen(['ffmpeg', '-re', '-f', 'lavfi',  '-i', 'testsrc=size='+size.lstrip()+':rate='+fps.lstrip(), '-c:v', 'libvpx', '-b:v', '1600k', '-preset', 'ultrafast',   '-b', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
@@ -150,24 +140,12 @@ def get_feed_options_not_supported():
 def initial_feed_setup(size,fps):
     if ENV_test=="false":
         if is_h264_supported:
-            if ENV_codec=='H264':
-                print("h264_supp")
-                run_ffmpeg_h264_supported(size,fps)
-            else:
-                print("vp8_supp")
-                run_ffmpeg_vp8_supported(size,fps)
+            print("h264_supp")
+            run_ffmpeg_h264_supported(size,fps)
         else:
-            if ENV_codec=='H264':
-                print("not_supp")
-                run_ffmpeg_h264_not_supported(size,fps)
-            else:
-                print("vp8_not_supp")
-                run_ffmpeg_vp8_not_supported(size,fps)
+            print("vp8_not_supp")
+            run_ffmpeg_vp8_not_supported(size,fps)
     else:
-        if ENV_codec=='H264':
-            print("h264_test")
-            run_ffmpeg_h264_test(size,fps)
-        else:
             print("vp8_test")
             run_ffmpeg_vp8_test(size,fps)
     if ENV_audio=='true':
@@ -193,7 +171,7 @@ async def ws_handler(websocket, path):
             else:
                 await websocket.send(json.dumps(get_feed_options_not_supported()))
         elif 'check_compression' in data.keys():
-            if ENV_codec=='H264':
+            if is_h264_supported:
                 await websocket.send(json.dumps({'env_codec':'h264'}))
             else:
                 await websocket.send(json.dumps({'env_codec':'vp8'}))
@@ -203,25 +181,13 @@ async def ws_handler(websocket, path):
             if ENV_audio=='true':
                 run_ffmpeg_audio(audio_card_id)
             if ENV_test=="false":
-                if is_h264_supported:
-                    if ENV_codec=='H264':
-                        run_ffmpeg_h264_supported(data['change_feed']['size'],data['change_feed']['fps'])
-                        await websocket.send(json.dumps({'stream_start':1}))
-                    else:
-                        run_ffmpeg_vp8_supported(data['change_feed']['size'],data['change_feed']['fps'])
-                        await websocket.send(json.dumps({'stream_start':1}))
-                else:
-                    if ENV_codec=='H264':
-                        run_ffmpeg_h264_not_supported(data['change_feed']['size'],data['change_feed']['fps'])
-                        await websocket.send(json.dumps({'stream_start':1}))
-                    else:
-                        run_ffmpeg_vp8_not_supported(data['change_feed']['size'],data['change_feed']['fps'])
-                        await websocket.send(json.dumps({'stream_start':1}))
-            else:
-                if ENV_codec=='H264':
-                    run_ffmpeg_h264_test(data['change_feed']['size'],data['change_feed']['fps'])
+                if is_h264_supported:  
+                    run_ffmpeg_h264_supported(data['change_feed']['size'],data['change_feed']['fps'])
                     await websocket.send(json.dumps({'stream_start':1}))
                 else:
+                    run_ffmpeg_vp8_not_supported(data['change_feed']['size'],data['change_feed']['fps'])
+                    await websocket.send(json.dumps({'stream_start':1}))
+            else:
                     run_ffmpeg_vp8_test(data['change_feed']['size'],data['change_feed']['fps'])
                     await websocket.send(json.dumps({'stream_start':1}))
 

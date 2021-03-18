@@ -82,8 +82,8 @@ RUN apt-get install -y alsa-utils
 
 # Find your JOINCODE at https://app.husarnet.com
 ENV JOINCODE=""
+ENV SUPPORTED=False
 ENV HOSTNAME=my-container-1
-ENV CODEC=H264
 ENV TEST=false
 ENV AUDIO=true
 ENV CAM_AUDIO_CHANNELS=2
