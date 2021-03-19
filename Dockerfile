@@ -12,14 +12,9 @@ RUN update-alternatives --set ip6tables /usr/sbin/ip6tables-nft
 # install webserver service
 RUN apt install -y nginx
 
-# some optional modules
-RUN apt install -y vim
-RUN apt install -y iputils-ping
-
 # ffmpeg
-RUN apt update -y
-RUN apt-get update -y
-RUN apt-get install -y ffmpeg
+RUN apt-get update -y && \
+    apt-get install -y ffmpeg
 
 # Install janus dependencies
 RUN apt-get install -y \
@@ -41,29 +36,31 @@ RUN apt-get install -y \
     automake \
     libconfig-dev
 
-RUN apt-get install -y \
+RUN apt install -y \
 	git \
 	make \
-	sudo 
+	sudo \
+    iputils-ping \
+    vim
 
 # Install libsrtp
-RUN cd ~ \
-    && git clone https://github.com/cisco/libsrtp.git \
-    && cd libsrtp \
-    && git checkout v2.2.0 \
-    && ./configure --prefix=/usr --enable-openssl \
-    && make shared_library \
-    && sudo make install
+RUN cd ~ && \
+    git clone https://github.com/cisco/libsrtp.git && \
+    cd libsrtp && \
+    git checkout v2.2.0 && \
+    ./configure --prefix=/usr --enable-openssl && \
+    make shared_library && \
+    sudo make install
 
 # Install janus
-RUN cd ~ \
-&& git clone https://github.com/meetecho/janus-gateway.git \
-&& cd janus-gateway \
-&& sh autogen.sh \
-&& ./configure --disable-websockets --disable-data-channels --disable-rabbitmq --disable-docs --prefix=/opt/janus \
-&& make \
-&& sudo make install \
-&& sudo make configs
+RUN cd ~ && \
+    git clone https://github.com/meetecho/janus-gateway.git && \
+    cd janus-gateway && \
+    sh autogen.sh && \
+    ./configure --disable-websockets --disable-data-channels --disable-rabbitmq --disable-docs --prefix=/opt/janus && \
+    make && \
+    sudo make install && \
+    sudo make configs
 
 RUN cp -r /opt/janus/share/janus/demos/. /var/www/html
 RUN rm -rf /var/www/html/favicon.ico
@@ -71,14 +68,14 @@ RUN rm -rf /var/www/html/favicon.ico
 # utility to list and change control options for a camera, eg.
 # v4l2-ctl -d /dev/video0 --list-ctrls
 # v4l2-ctl --set-ctrl=exposure_auto=1
-RUN apt-get install -y v4l-utils
+RUN apt install -y v4l-utils
+RUN apt install -y alsa-utils
 
 # install python dependencies
 RUN apt install python3.8 -y && \
     apt install python-pkg-resources python3-pkg-resources -y && \
     apt install python3-pip -y && \
     pip3 install websockets
-RUN apt-get install -y alsa-utils
 
 # Husarnet credentials. Find your JOINCODE at https://app.husarnet.com
 ENV JOINCODE=""
