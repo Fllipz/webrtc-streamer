@@ -80,13 +80,16 @@ RUN apt install python3.8 -y && \
     pip3 install websockets
 RUN apt-get install -y alsa-utils
 
-# Find your JOINCODE at https://app.husarnet.com
+# Husarnet credentials. Find your JOINCODE at https://app.husarnet.com
 ENV JOINCODE=""
-ENV SUPPORTED=False
 ENV HOSTNAME=my-container-1
-ENV TEST=false
+
+# Audio settings
 ENV AUDIO=true
 ENV CAM_AUDIO_CHANNELS=2
+
+# Advanced (keep default)
+ENV TEST=false
 ENV ENABLE_BASE_SERVER_FORWARDING=0
 
 EXPOSE 80 7088 8088 8188 8089
