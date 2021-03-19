@@ -171,7 +171,7 @@ async def ws_handler(websocket, path):
                 await websocket.send(json.dumps({'env_codec':'vp8'}))
         elif 'change_feed' in data.keys():
             kill_ffmpeg()
-            sleep(1)
+            sleep(2)
             if ENV_audio=='true':
                 run_ffmpeg_audio(audio_card_id)
             if ENV_test=="false":
