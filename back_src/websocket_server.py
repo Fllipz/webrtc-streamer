@@ -9,8 +9,6 @@ import subprocess
 import re
 import ipaddress
 
-
-
 from time import sleep
 
 event = asyncio.Event()
@@ -23,7 +21,6 @@ import os
 ENV_test = os.environ['TEST']
 ENV_audio = os.environ['AUDIO']
 ENV_audio_channels = os.environ['CAM_AUDIO_CHANNELS']
-
 
 
 def check_if_webcam_outputs_h264_feed():
@@ -67,10 +64,10 @@ def kill_ffmpeg():
     except subprocess.CalledProcessError as e:
         print("Error killing ffmpeg!")
 
-def run_ffmpeg_h264_supported(size, fps):
+def run_ffmpeg_h264(size, fps):
     subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size, '-codec:v', 'h264', '-i', device, '-an', '-c:v', 'copy', '-f', 'rtp', 'rtp://localhost:8005' ])
 
-def run_ffmpeg_vp8_not_supported(size,fps):
+def run_ffmpeg_vp8(size,fps):
     subprocess.Popen(['ffmpeg', '-f', 'v4l2', '-framerate', fps, '-video_size', size,  '-i', device, '-codec:v', 'libvpx',  '-preset', 'ultrafast',  '-s', size, '-b:v', '1000k', '-f', 'rtp', 'rtp://localhost:8006'])
 
 def run_ffmpeg_vp8_test(size,fps):
@@ -87,8 +84,6 @@ def get_audiocard_id():
     string = result.stdout
     string = string[string.find('card')+4:string.find('card')+6]
     return string
-
-
 
 audio_card_id = get_audiocard_id()
 
@@ -115,8 +110,7 @@ def get_feed_options_supported():
             if res != None:
                 parsed["options"][size][i]=res.group(1)
                 i+=1
-        
-
+                
     return parsed
 
 def get_feed_options_not_supported():
@@ -132,8 +126,7 @@ def get_feed_options_not_supported():
             res = re.search(r'\((.*?) fps\)',line)
             if res != None:
                 parsed["options"][size][i]=res.group(1)
-                i+=1
-        
+                i+=1    
 
     return parsed
 
@@ -141,13 +134,14 @@ def initial_feed_setup(size,fps):
     if ENV_test=="false":
         if is_h264_supported:
             print("h264_supp")
-            run_ffmpeg_h264_supported(size,fps)
+            run_ffmpeg_h264(size,fps)
         else:
             print("vp8_not_supp")
-            run_ffmpeg_vp8_not_supported(size,fps)
+            run_ffmpeg_vp8(size,fps)
     else:
-            print("vp8_test")
-            run_ffmpeg_vp8_test(size,fps)
+        print("vp8_test")
+        run_ffmpeg_vp8_test(size,fps)
+    
     if ENV_audio=='true':
         run_ffmpeg_audio(audio_card_id)
 
@@ -182,16 +176,14 @@ async def ws_handler(websocket, path):
                 run_ffmpeg_audio(audio_card_id)
             if ENV_test=="false":
                 if is_h264_supported:  
-                    run_ffmpeg_h264_supported(data['change_feed']['size'],data['change_feed']['fps'])
+                    run_ffmpeg_h264(data['change_feed']['size'],data['change_feed']['fps'])
                     await websocket.send(json.dumps({'stream_start':1}))
                 else:
-                    run_ffmpeg_vp8_not_supported(data['change_feed']['size'],data['change_feed']['fps'])
+                    run_ffmpeg_vp8(data['change_feed']['size'],data['change_feed']['fps'])
                     await websocket.send(json.dumps({'stream_start':1}))
             else:
-                    run_ffmpeg_vp8_test(data['change_feed']['size'],data['change_feed']['fps'])
-                    await websocket.send(json.dumps({'stream_start':1}))
-
-            
+                run_ffmpeg_vp8_test(data['change_feed']['size'],data['change_feed']['fps'])
+                await websocket.send(json.dumps({'stream_start':1}))
 
 start_server = websockets.serve(ws_handler, port=8001)
 
