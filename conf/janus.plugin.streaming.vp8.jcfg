@@ -137,7 +137,7 @@ vp8-sample: {
 	metadata = "You can use this metadata section to put any info you want!"
 	audio = true
 	audioport = 8007
-	audiopt = 10
+	audiopt = 111
 	audiortpmap = "opus/48000/2"
 	video = true
 	videoport = 8006
