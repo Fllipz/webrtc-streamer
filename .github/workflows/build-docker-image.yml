@@ -33,7 +33,7 @@ jobs:
       with:
         context: .
         file: ./Dockerfile
-        platforms: linux/arm64, linux/amd64
+        platforms: linux/arm64, linux/amd64, linux/arm/v7
         push: true
         tags: husarnet/webrtc-streamer:latest
         cache-from: type=registry,ref=husarnet/webrtc-streamer:latest
