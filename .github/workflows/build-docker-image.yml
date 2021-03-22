@@ -35,5 +35,6 @@ jobs:
         file: ./Dockerfile
         platforms: linux/arm64, linux/amd64
         push: true
-        tags: |
-          husarnet/webrtc-streamer:latest
+        tags: husarnet/webrtc-streamer:latest
+        cache-from: type=registry,ref=husarnet/webrtc-streamer:latest
+        cache-to: type=inline
