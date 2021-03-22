@@ -1,6 +1,4 @@
-FROM ubuntu:20.10
-
-RUN update-alternatives --set ip6tables /usr/sbin/ip6tables-nft
+FROM ubuntu:20.04
 
 # install Husarnet client
 RUN apt update -y && \
@@ -8,6 +6,8 @@ RUN apt update -y && \
     apt install -y gnupg2 && \
     apt install -y systemd && \
     curl https://install.husarnet.com/install.sh | bash
+
+RUN update-alternatives --set ip6tables /usr/sbin/ip6tables-nft
 
 # install webserver service
 RUN apt install -y nginx
