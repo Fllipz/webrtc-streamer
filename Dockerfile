@@ -79,7 +79,7 @@ RUN apt install python3.8 -y && \
 
 # Husarnet credentials. Find your JOINCODE at https://app.husarnet.com
 ENV JOINCODE=""
-ENV HOSTNAME=my-container-1
+ENV HOSTNAME=my-webrtc-streamer
 
 # Audio settings
 ENV AUDIO=true
