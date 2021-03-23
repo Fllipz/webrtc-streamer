@@ -10,7 +10,7 @@ A dockerized firmware for an IP camera (eg. Single Board Computer + USB web came
 
 https://hub.docker.com/r/husarnet/webrtc-streamer
 
-Otherwise, the following steps will show you how to run the project manualy.
+Otherwise, the following steps will show you how to start the project manually.
 
 ## Requirements
 
@@ -249,7 +249,7 @@ Press [q] to stop, [?] for help
 frame=  265 fps= 31 q=-1.0 size=    1398kB time=00:00:08.76 bitrate=1306.7kbits/s speed=1.02x  
 ```
 
-## Accessing the Web User Interface and a Stream
+## Accessing a Web User Interface and a Stream
 
 To access a web UI and video stream hosted by the SBC, you need to connect your computer running Firefox or Chrome web browser to the same Husarnet network as the SBC.
 
