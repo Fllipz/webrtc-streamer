@@ -173,7 +173,7 @@ done
 
 *******************************************
 💡 Tip
-To test a WebRTC stream visit:
+To access a live video stream visit:
 👉 http://[fc94:4090:c101:c65e:ef7a:fcf1:6789:3b51]:80/ 👈
 in your web browser 💻
 *******************************************
