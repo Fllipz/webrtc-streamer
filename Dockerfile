@@ -99,10 +99,10 @@ COPY conf/*.jcfg  /opt/janus/etc/janus/
 # copy project files into the image
 COPY init-container.sh /opt
 COPY *.sh /opt/
-COPY src /var/www/html/
+COPY frontend_src /var/www/html/
 
 WORKDIR /app
-COPY back_src /app/
+COPY backend_src /app/
 
 # initialize a container
 CMD /opt/init-container.sh
